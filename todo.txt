@@ -1,3 +1,2 @@
 Part 1:
 -Check if FrackMan overlaps with dirt, remove it
--A limited version of the StudentWorld class

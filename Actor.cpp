@@ -76,11 +76,11 @@ void FrackMan::doSomething()
 	  //TODO: FrackMan sets itself to dead
 	  break;
 	case KEY_PRESS_TAB:
-	  //TODO: drop a gold nugget for the protesters
+	  //TODO: Drop a gold nugget for the protesters
 	  break;
 	case 'z':
 	case 'Z':
-	  //Use a sonar
+	  //TODO: Use a sonar
 	  break;
 	}
     }
@@ -108,14 +108,30 @@ void FrackMan::processMovement(Direction moveDir)
 	moveTo(getX() + 1, getY());
     }
     else if(moveDir == up){
-      if(getY() != 0)
-	moveTo(getX(), getY() - 1);
-    }
-    else if(moveDir == down){
       if(getY() != 60)
 	moveTo(getX(), getY() + 1);
+    }
+    else if(moveDir == down){
+      if(getY() != 0)
+	moveTo(getX(), getY() - 1);
     }
   }
 
   return;
+}
+
+int FrackMan::getHealth(){
+  return m_health;
+}
+
+int FrackMan::getWater(){
+  return m_water;
+}
+
+int FrackMan::getSonars(){
+  return m_sonar;
+}
+
+int FrackMan::getGold(){
+  return m_gold;
 }

@@ -36,9 +36,13 @@ public:
   FrackMan(StudentWorld* world);
   ~FrackMan();
   void doSomething();
+  int getHealth();
+  int getWater();
+  int getSonars();
+  int getGold();
 private:
   void processMovement(Direction moveDir);
-  //TODO: Figure out which ones of these actually need to be here
+  //TODO: Figure out which ones of these variables actually need to be here
   int m_health;
   int m_water;
   int m_sonar;
