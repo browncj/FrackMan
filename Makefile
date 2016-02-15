@@ -1,4 +1,5 @@
 CC = g++    # On lnxsrv07 or 09, replace this with /usr/local/cs/bin/g++
+CXXFLAGS = -g
 LIBS = -lglut -lGL -lGLU
 RPATH =
 
@@ -14,13 +15,13 @@ HEADERS = $(wildcard *.h)
 all: FrackMan
 
 %.o: %.cpp $(HEADERS)
-	$(CC) -c -std=c++11 $< -o $@
+	$(CC) $(CXXFLAGS) -c -std=c++11 $< -o $@
 
 FrackMan: $(OBJECTS) main.o
-	$(CC) $(RPATH) $(OBJECTS) main.o $(LIBS) -o $@
+	$(CC) $(CXXFLAGS) $(RPATH) $(OBJECTS) main.o $(LIBS) -o $@
 
 test: $(OBJECTS) test.o
-	$(CC) $(RPATH) $(OBJECTS) test.o $(LIBS) -o $@
+	$(CC) $(CXXFLAGS) $(RPATH) $(OBJECTS) test.o $(LIBS) -o $@
 
 clean:
 	rm -f *.o
