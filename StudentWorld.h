@@ -10,29 +10,14 @@
 class StudentWorld : public GameWorld
 {
 public:
-	StudentWorld(std::string assetDir)
-	 : GameWorld(assetDir)
-	{
-	}
-
-	virtual int init()
-	{
-		return GWSTATUS_CONTINUE_GAME;
-	}
-
-	virtual int move()
-	{
-		  // This code is here merely to allow the game to build, run, and terminate after you hit enter a few times.
-		  // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-		decLives();
-		return GWSTATUS_PLAYER_DIED;
-	}
-
-	virtual void cleanUp()
-	{
-	}
+  StudentWorld(std::string assetDir);
+  virtual int init();
+  virtual int move();
+  virtual void cleanUp();
 
 private:
+  void setDisplayText();
+  void formatDisplayText();
 };
 
 #endif // STUDENTWORLD_H_
