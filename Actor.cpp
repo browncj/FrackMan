@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Actor.h"
 #include "StudentWorld.h"
 
@@ -58,6 +57,8 @@ void FrackMan::doSomething()
 	playSound = true;
     }
   }
+  if(playSound)
+    getWorld()->playSound(SOUND_DIG);
 
   //Check if a key is pressed; if so, act on it
   int ch;
