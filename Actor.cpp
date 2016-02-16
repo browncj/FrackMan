@@ -104,7 +104,7 @@ void FrackMan::processMovement(Direction moveDir)
 	moveTo(getX() - 1, getY());
     }
     else if(moveDir == right){
-      if(getX() != 60)
+      if(getX() != 56)
 	moveTo(getX() + 1, getY());
     }
     else if(moveDir == up){
