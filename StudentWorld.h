@@ -16,6 +16,7 @@ public:
   virtual int init();
   virtual int move();
   virtual void cleanUp();
+  bool destroyDirt(int x, int y); //tries to destroy dirt at (x, y), returns true if successful
 private:
   void setDisplayText();
   std::string formatDisplayText(int score, int level, int lives, int health,

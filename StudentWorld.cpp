@@ -89,6 +89,26 @@ void StudentWorld::cleanUp()
   return; 
 }
 
+//Searches for dirt at the location (x, y)
+//if it is found, then the dirt is deleted
+bool StudentWorld::destroyDirt(int x, int y)
+{
+  for(int i = 0; i < 60; i++){
+    for(int k = 0; k < 60; k++){
+      //Do not hceck spots in the array with null pointers
+      if (m_dirt[i][k] == NULL)
+	continue;
+
+      if ( m_dirt[i][k]->getX() == x && m_dirt[i][k]->getY() == y ){
+	delete m_dirt[i][k];
+	m_dirt[i][k] = NULL;
+	return true;
+      }
+    }
+  }
+  return false;
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values

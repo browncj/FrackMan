@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Actor.h"
 #include "StudentWorld.h"
 
@@ -47,7 +48,16 @@ FrackMan::~FrackMan()
 void FrackMan::doSomething()
 {
   //TODO: Check if alive
-  //TODO: Check remove any dirt the FrackMan overlaps
+
+  //Check for and remove any dirt that the FrackMan overlaps
+  //Also, play the digging sound if this occurs
+  bool playSound = false;
+  for(int i = getX(); i < getX() + 4 && i < 60; i++){
+    for(int k = getY(); k < getY() + 4 && k < 60; k++){
+      if ( getWorld()->destroyDirt(i, k) )
+	playSound = true;
+    }
+  }
 
   //Check if a key is pressed; if so, act on it
   int ch;
