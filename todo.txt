@@ -2,9 +2,9 @@ Part 1 is complete. (right?)
 
 Part 2:
 Boulder:
-	-Implement the doSomething() method for boulders
+	-In doSomething() method, check if boulder comes within a certain
+	radius of protesters or the FrackMan
 
 StudentWorld:
-	-Implement actual initialization. Right now, three boulders
-are just added in a set spot (and then immediately deleted because their
-doSomething() method sets them to dead right away)
+	-Implement actual initialization. Right now, four boulders
+are just added in a set spot

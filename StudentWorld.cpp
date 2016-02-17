@@ -31,6 +31,7 @@ int StudentWorld::init()
   m_actors.push_back(new Boulder(10, 20, this));
   m_actors.push_back(new Boulder(20, 30, this));
   m_actors.push_back(new Boulder(30, 40, this));
+  m_actors.push_back(new Boulder(10, 50, this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -129,6 +130,33 @@ bool StudentWorld::destroyDirt(int x, int y)
     }
   }
   return false;
+}
+
+bool StudentWorld::isDirt(int x, int y)
+{
+  for(int i = 0; i < 60; i++){
+    for(int k = 0; k < 60; k++){
+      //Do not check null dirt
+      if(m_dirt[i][k] == NULL)
+	continue;
+
+      if(m_dirt[i][k]->getX() == x && m_dirt[i][k]->getY() == y)
+	return true;
+    }
+  }
+  return false;
+}
+
+//Returns a pointer to an actor at position (x, y)
+//If there is no actor there, then return NULL
+Actor* StudentWorld::getActor(int x, int y)
+{
+  for(size_t i = 0; i < m_actors.size(); i++){
+    if(m_actors[i]->getX() == x && m_actors[i]->getY() == y){
+      return m_actors[i];
+    }
+  }
+  return NULL;
 }
 
 void StudentWorld::setDisplayText()

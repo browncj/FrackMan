@@ -4,7 +4,7 @@
 // Students:  Add code to this file (if you wish), Actor.h, StudentWorld.h, and StudentWorld.cpp
 
 Actor::Actor(int imageId, int startX, int startY, Direction startDirection,
-	StudentWorld* world, float size, unsigned int depth)
+	     StudentWorld* world, float size, unsigned int depth)
   : GraphObject(imageId, startX, startY, startDirection, size, depth)
 {
   m_world = world;
@@ -173,35 +173,73 @@ Boulder::~Boulder()
 
 void Boulder::doSomething()
 {
-
-  //DEBUGGING IMPLEMENTATION:
-  //immediately kill boulder
-  setState(false);
-
   //Make sure boulder is still alive
   if( !isAlive() )
     return;
 
   if(m_state == stable){
-    //dummy implementation just kills boulder
-    setState(false);
+    bool fall = true;
 
-    //TODO:
-    //check if any dirt is in 4 squares immediately below it
-    //enter waiting state for 30 ticks
+    //Make sure there could possibly be dirt below the boulder
+    if(getX() + 3 > 59 || getY() - 1 < 0){
+      fall = false;
+    }
+    else{
+      //Check all the possible dirt spots beneath the boulder
+      if(getWorld()->isDirt(getX(), getY() - 1))
+	fall = false;
+      if(getWorld()->isDirt(getX() + 1, getY() - 1))
+	fall = false;
+      if(getWorld()->isDirt(getX() + 2, getY() - 1))
+	fall = false;
+      if(getWorld()->isDirt(getX() + 3, getY() - 1))
+	fall = false;
+    }
+
+    if(fall)
+      //The boulder may fall, so set the state to waiting
+      m_state = waiting;
   }
   else if(m_state == waiting){
     //Decrement wait counter
     m_wait--;
 
-    //When time has elapsed, begin falling
-    if( m_wait <= 0 )
+    //When time has elapsed, begin falling and play the sound
+    if( m_wait <= 0 ){
       m_state = falling;
+      getWorld()->playSound(SOUND_FALLING_ROCK);
+    }
   }
   else if(m_state == falling){
-    setState(false);
-    //dummy implementation above just kills boulder
-    //TODO: Implement falling
-  }
+    //The boulder must die if it is at the bottom of the oil field
+    bool fall = true;
+    if(getY() == 0)
+      fall = false;
 
+    //Check if boulder hits top of another boulder
+    for(int i = 0; i < 4; i++){
+      StudentWorld* w = getWorld();
+      int yOff = 4;
+      if(w->getActor(getX() + i, getY() - yOff) != NULL && w->getActor(getX() + i, getY() - yOff)->isBoulder())
+	fall = false;
+    }
+
+    //Check if boulder is about to run into dirt
+    if(getWorld()->isDirt(getX(), getY() - 1))
+      fall = false;
+    if(getWorld()->isDirt(getX() + 1, getY() - 1))
+      fall = false;
+    if(getWorld()->isDirt(getX() + 2, getY() - 1))
+      fall = false;
+    if(getWorld()->isDirt(getX() + 3, getY() - 1))
+      fall = false;
+
+    if(fall) //if the boulder must fall, then do so
+      moveTo(getX(), getY() - 1);
+    else //otherwise, mark the boulder for deletion
+      setState(false);
+
+    //TODO: Check if boulder comes within radius of 3 of
+    //a protester or the FrackMan
+  }
 }

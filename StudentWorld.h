@@ -18,6 +18,8 @@ public:
   virtual int move();
   virtual void cleanUp();
   bool destroyDirt(int x, int y); //tries to destroy dirt at (x, y), returns true if successful
+  bool isDirt(int x, int y); //returns true if dirt is at (x, y)
+  Actor* getActor(int x, int y); //returns a pointer to any actor at (x, y), otherwise returns NULL
 private:
   void setDisplayText();
   std::string formatDisplayText(int score, int level, int lives, int health,

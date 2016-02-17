@@ -17,6 +17,7 @@ public:
   virtual void doSomething() = 0;
   bool isAlive();
   void setState(bool alive);
+  virtual bool isBoulder() {return false;} //Returns true only if a boulder
   StudentWorld* getWorld(); //TODO: See if this can be made private
 private:
   StudentWorld* m_world;
@@ -59,6 +60,7 @@ class Boulder : public Actor
   Boulder(int startX, int startY, StudentWorld* world);
   ~Boulder();
   void doSomething();
+  virtual bool isBoulder() {return true;} //for checking if Actor is a boulder
  private:
   //Enumerate the three possible states of a boulder
   enum boulderState {stable, waiting, falling};
