@@ -119,7 +119,7 @@ void StudentWorld::setDisplayText()
   int squirts = m_frackman->getWater();
   int gold = m_frackman->getGold();
   int sonar = m_frackman->getSonars();
-  int barrelsLeft = 50;
+  int barrelsLeft = 2;
 
   //Create string to display using the values
   string s = formatDisplayText(score, level, lives, health, squirts,
@@ -163,16 +163,32 @@ string StudentWorld::formatDisplayText(int score, int level, int lives, int heal
   return s;
 }
 
-//TODO: Implement to correctly add leading zeros or spaces
-//Current dummy implementation only adds one leading zero
-//every time
+//For the int input, return a string of length totalDigits that is
+//that input, plus any number of leading characters necessary.
+//if zeros is true, then the leading chars will be zeros, otherwise, they
+//will be spaces
 string StudentWorld::formatDigit(int input, int totalDigits, bool zeros)
-//if zeros is true, add leading zeros
-//otherwise add leading spaces
 {
-  string s = to_string(input);
+  char filler;
 
-  string q = "0";
-  q += s;
-  return q;
+  //Determine what leading char should be
+  if(zeros)
+    filler = '0';
+  else
+    filler = ' ';
+
+  //If input is zero, build and return that number of filler chars
+  if(input == 0){
+    string s = "0";
+    for(int i = 0; i < totalDigits - 1; i++)
+      s = filler + s;
+    return s;
+  }
+
+  string s = to_string(input);
+  for(int i = s.length(); i < totalDigits; i++){
+    s = filler + s;
+  }
+
+  return s;
 }
