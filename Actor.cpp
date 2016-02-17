@@ -8,11 +8,22 @@ Actor::Actor(int imageId, int startX, int startY, Direction startDirection,
   : GraphObject(imageId, startX, startY, startDirection, size, depth)
 {
   m_world = world;
+  m_alive = true;
 }
 
 StudentWorld* Actor::getWorld()
 {
   return m_world;
+}
+
+bool Actor::isAlive()
+{
+  return m_alive;
+}
+
+void Actor::setState(bool alive)
+{
+  m_alive = alive;
 }
 
 Actor::~Actor()
@@ -145,4 +156,52 @@ int FrackMan::getSonars(){
 
 int FrackMan::getGold(){
   return m_gold;
+}
+
+Boulder::Boulder(int startX, int startY, StudentWorld* world)
+  : Actor(IID_BOULDER, startX, startY, down, world, 1.0, 1)
+{
+  //Boulders start out visible
+  setVisible(true);
+
+  m_state = stable;
+  m_wait = 30;
+}
+
+Boulder::~Boulder()
+{}
+
+void Boulder::doSomething()
+{
+
+  //DEBUGGING IMPLEMENTATION:
+  //immediately kill boulder
+  setState(false);
+
+  //Make sure boulder is still alive
+  if( !isAlive() )
+    return;
+
+  if(m_state == stable){
+    //dummy implementation just kills boulder
+    setState(false);
+
+    //TODO:
+    //check if any dirt is in 4 squares immediately below it
+    //enter waiting state for 30 ticks
+  }
+  else if(m_state == waiting){
+    //Decrement wait counter
+    m_wait--;
+
+    //When time has elapsed, begin falling
+    if( m_wait <= 0 )
+      m_state = falling;
+  }
+  else if(m_state == falling){
+    setState(false);
+    //dummy implementation above just kills boulder
+    //TODO: Implement falling
+  }
+
 }

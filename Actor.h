@@ -7,6 +7,7 @@
 
 class StudentWorld;
 
+//All classes inherit from this
 class Actor : public GraphObject
 {
 public:
@@ -14,9 +15,12 @@ public:
 	StudentWorld* world, float size, unsigned int depth);
   virtual ~Actor();
   virtual void doSomething() = 0;
+  bool isAlive();
+  void setState(bool alive);
   StudentWorld* getWorld(); //TODO: See if this can be made private
 private:
   StudentWorld* m_world;
+  bool m_alive;
 };
 
 class Dirt : public Actor
@@ -47,6 +51,19 @@ private:
   int m_water;
   int m_sonar;
   int m_gold;
+};
+
+class Boulder : public Actor
+{
+ public:
+  Boulder(int startX, int startY, StudentWorld* world);
+  ~Boulder();
+  void doSomething();
+ private:
+  //Enumerate the three possible states of a boulder
+  enum boulderState {stable, waiting, falling};
+  boulderState m_state;
+  int m_wait; //keeps track of ticks in waiting state
 };
 
 #endif // ACTOR_H_

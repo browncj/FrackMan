@@ -5,6 +5,7 @@
 #include "GameConstants.h"
 #include "Actor.h"
 #include <string>
+#include <vector>
 
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
@@ -22,6 +23,7 @@ private:
   std::string formatDisplayText(int score, int level, int lives, int health,
 				int squirts, int gold, int sonar, int barrelsLeft);
   std::string formatDigit(int input, int totalDigits, bool zeros);
+  std::vector<Actor*> m_actors;
   Dirt* m_dirt[60][60];
   FrackMan* m_frackman;
 };

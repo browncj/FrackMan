@@ -1,6 +1,8 @@
 #include "StudentWorld.h"
-#include <vector>
+#include <iostream> //for debugging
 #include <string>
+#include <algorithm> //for remove_if
+
 using namespace std;
 
 GameWorld* createStudentWorld(string assetDir)
@@ -25,6 +27,10 @@ StudentWorld::~StudentWorld()
 int StudentWorld::init()
 {
   //TODO: Add actors
+  //Dummy implementation: just add three boulders
+  m_actors.push_back(new Boulder(10, 20, this));
+  m_actors.push_back(new Boulder(20, 30, this));
+  m_actors.push_back(new Boulder(30, 40, this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -48,6 +54,16 @@ int StudentWorld::init()
   return GWSTATUS_CONTINUE_GAME;
 }
 
+//Determines if pointed to Actor is dead. If so, deletes and returns true
+bool isDead(Actor* p)
+{
+  if (!p->isAlive()){
+    delete p;
+    return true;
+  }
+  return false;
+}
+
 int StudentWorld::move()
 {
   //Update the text with at the top with score/level/lives etc.
@@ -55,8 +71,14 @@ int StudentWorld::move()
 
   //Ask all actors to do something
   m_frackman->doSomething();
+  for(size_t i = 0; i < m_actors.size(); i++){
+    m_actors[i]->doSomething();
+  }
 
-  //TODO: Add function to remove all dead game objects
+  //TODO: Right at this point, check if the FrackMan gave up
+
+  //Delete all actors that are dead
+  m_actors.erase(remove_if(m_actors.begin(), m_actors.end(), isDead), m_actors.end());
 
   //TODO: If player died this tick, then return and indicate so
 
