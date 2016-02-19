@@ -29,6 +29,21 @@ void Actor::setState(bool alive)
 Actor::~Actor()
 {}
 
+//Given an (x, y) pair and a direction, this function modifies
+//x and y by moving the coordinate dist units in the direction
+//of dir
+void Actor::newCoords(int& x, int& y, int dist, Direction dir)
+{
+  if(dir == up)
+    y += dist;
+  else if(dir == down)
+    y -= dist;
+  else if(dir == left)
+    x -= dist;
+  else if(dir == right)
+    x += dist;
+}
+
 Dirt::Dirt(int startX, int startY, StudentWorld* world)
   : Actor(IID_DIRT, startX, startY, right, world, 0.25, 3)
 {
@@ -91,8 +106,26 @@ void FrackMan::doSomething()
 	  processMovement(down);
 	  break;
 	case KEY_PRESS_SPACE:
-	  //TODO: Fire a squirt
-	  //+ other stuff, include playing sound
+	  if(m_water > 0){
+	    //Add squirt into world
+	    getWorld()->playSound(SOUND_PLAYER_SQUIRT);
+	    m_water--;
+
+	    //TODO: Check if too close to boulder or dirt
+	    Direction myDir = getDirection();
+	    Squirt* newSquirt;
+	    if(myDir == up)
+	      newSquirt = new Squirt(getX(), getY() + 4, myDir, getWorld());
+	    else if(myDir == down)
+	      newSquirt = new Squirt(getX(), getY() - 4, myDir, getWorld());
+	    else if(myDir == left)
+	      newSquirt = new Squirt(getX() - 4, getY(), myDir, getWorld());
+	    else if(myDir == right)
+	      newSquirt = new Squirt(getX() + 4, getY(), myDir, getWorld());
+
+	    //Let StudentWorld class maange the squirt
+	    getWorld()->giveActor(newSquirt);
+	  }
 	  break;
 	case KEY_PRESS_ESCAPE:
 	  //TODO: FrackMan sets itself to dead
@@ -242,4 +275,39 @@ void Boulder::doSomething()
     //TODO: Check if boulder comes within radius of 3 of
     //a protester or the FrackMan
   }
+}
+
+Squirt::Squirt(int startX, int startY, Direction dir, StudentWorld* world)
+  :  Actor(IID_WATER_SPURT, startX, startY, dir, world, 1.0, 1)
+{
+  //Set the initial travel distance
+  m_travelDistance = 4;
+
+  //Must be visible at outset
+  setVisible(true);
+}
+
+Squirt::~Squirt()
+{}
+
+void Squirt::doSomething()
+{
+  //if within 3 radius of protester, causes 2 points of annoyance and then dies
+
+  //if has traveled full travel distance, sets its state to dead
+  if (m_travelDistance == 0)
+    setState(false);
+
+  //otherwise, checks if it can move one square in facing direction
+  //if there is a boulder or dirt there, it sets its location to dead
+
+  //otherwise, the squirt moves one square forward in its currently-facing direction
+  int newX = getX();
+  int newY = getY();
+  newCoords(newX, newY, 4, getDirection());
+  moveTo(newX, newY);
+
+  //Also decrement the travel distance counter
+  m_travelDistance--;
+  
 }

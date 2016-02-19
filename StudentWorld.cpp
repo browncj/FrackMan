@@ -159,6 +159,13 @@ Actor* StudentWorld::getActor(int x, int y)
   return NULL;
 }
 
+//Allows other classes to give actors to the StudentWorld class
+//to manage
+void StudentWorld::giveActor(Actor* p)
+{
+  m_actors.push_back(p);
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values
@@ -242,3 +249,4 @@ string StudentWorld::formatDigit(int input, int totalDigits, bool zeros)
 
   return s;
 }
+

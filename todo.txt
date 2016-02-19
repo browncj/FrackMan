@@ -8,3 +8,9 @@ Boulder:
 StudentWorld:
 	-Implement actual initialization. Right now, four boulders
 are just added in a set spot
+
+Squirt:
+	-In frackman class: check if initial squirt location is occupied by
+	dirt object, or within a radius of a boulder object
+	-In squirt class: check if within 3.0 radius of a protester, also
+	check if gets blocked by dirt or a boulder

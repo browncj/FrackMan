@@ -19,6 +19,8 @@ public:
   void setState(bool alive);
   virtual bool isBoulder() {return false;} //Returns true only if a boulder
   StudentWorld* getWorld(); //TODO: See if this can be made private
+  void newCoords(int& x, int& y, int dist, Direction dir); //modify x and y in direction of distance
+
 private:
   StudentWorld* m_world;
   bool m_alive;
@@ -66,6 +68,16 @@ class Boulder : public Actor
   enum boulderState {stable, waiting, falling};
   boulderState m_state;
   int m_wait; //keeps track of ticks in waiting state
+};
+
+class Squirt : public Actor
+{
+ public:
+  Squirt(int startX, int startY, Direction dir, StudentWorld* world);
+  ~Squirt();
+  void doSomething();
+ private:
+  int m_travelDistance;
 };
 
 #endif // ACTOR_H_
