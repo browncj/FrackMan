@@ -1,6 +1,10 @@
 Part 1 is complete. (right?)
 
 Part 2:
+     Frackman:
+	-A lot of stuff, including checking of the FrackMan is being blocked
+	by a boulder
+
 Boulder:
 	-In doSomething() method, check if boulder comes within a certain
 	radius of protesters or the FrackMan
@@ -14,3 +18,7 @@ Squirt:
 	dirt object, or within a radius of a boulder object
 	-In squirt class: check if within 3.0 radius of a protester, also
 	check if gets blocked by dirt or a boulder
+
+
+WaterPool:
+	-in doSomething(), check if within 3.0 units from the FrackMan

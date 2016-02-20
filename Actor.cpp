@@ -309,5 +309,31 @@ void Squirt::doSomething()
 
   //Also decrement the travel distance counter
   m_travelDistance--;
-  
+}
+
+WaterPool::WaterPool(int startX, int startY, StudentWorld* world)
+  : Actor(IID_WATER_POOL, startX, startY, right, world, 1.0, 2)
+{
+  setVisible(true);
+  int currLevel = getWorld()->getLevel();
+  m_remainingTicks = std::max(100, 300-10*currLevel);
+}
+
+WaterPool::~WaterPool()
+{}
+
+void WaterPool::doSomething()
+{
+  //Must not do anything if currently dead
+  if( !isAlive() )
+    return;
+
+  //Check if water pool is within a radius from the frackman
+
+  //If water pool has run out of ticks, set it to be removed
+  if( m_remainingTicks <= 0)
+    setState(false);
+
+  //Decrement the counter telling how long the pool will remain
+  m_remainingTicks--;
 }

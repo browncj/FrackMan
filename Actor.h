@@ -80,4 +80,14 @@ class Squirt : public Actor
   int m_travelDistance;
 };
 
+class WaterPool : public Actor
+{
+public:
+  WaterPool(int startX, int startY, StudentWorld* world);
+  ~WaterPool();
+  void doSomething();
+private:
+  int m_remainingTicks;
+};
+
 #endif // ACTOR_H_
