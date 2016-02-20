@@ -183,6 +183,10 @@ int FrackMan::getWater(){
   return m_water;
 }
 
+void FrackMan::setWater(int squirts){
+  m_water = squirts;
+}
+
 int FrackMan::getSonars(){
   return m_sonar;
 }
@@ -328,8 +332,22 @@ void WaterPool::doSomething()
   if( !isAlive() )
     return;
 
-  //Check if water pool is within a radius from the frackman
+  //Check if water pool is within a radius from the FrackMan
+  Actor* FrackMan = getWorld()->findNearbyFrackMan(this, 3);
+  if(FrackMan != NULL){
+    //The water pool must now die
+    setState(false);
 
+    //Play sound to indicate a goodie was picked up
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+
+    //Tell FrackMan that he got 5 new squirts of water
+    getWorld()->giveFrackManWater(5);
+
+    //Increase the player's score by 100 points
+    getWorld()->increaseScore(100);
+  }
+  
   //If water pool has run out of ticks, set it to be removed
   if( m_remainingTicks <= 0)
     setState(false);

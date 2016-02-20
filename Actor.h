@@ -44,7 +44,10 @@ public:
   ~FrackMan();
   void doSomething();
   int getHealth();
+
   int getWater();
+  void setWater(int squirts);
+
   int getSonars();
   int getGold();
 private:

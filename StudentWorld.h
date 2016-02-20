@@ -17,10 +17,26 @@ public:
   virtual int init();
   virtual int move();
   virtual void cleanUp();
-  bool destroyDirt(int x, int y); //tries to destroy dirt at (x, y), returns true if successful
-  bool isDirt(int x, int y); //returns true if dirt is at (x, y)
-  Actor* getActor(int x, int y); //returns a pointer to any actor at (x, y), otherwise returns NULL
-  void giveActor(Actor* p); //gives an actor to the StudentWorld class to manage
+
+  //tries to destroy dirt at (x, y), returns true if successful
+  bool destroyDirt(int x, int y);
+
+  //returns true if dirt is at (x, y)
+  bool isDirt(int x, int y);
+
+  //returns a pointer to any actor at (x, y), otherwise returns NULL
+  Actor* getActor(int x, int y);
+
+  //gives an actor to the StudentWorld class to manage
+  void giveActor(Actor* p);
+
+  //If the FrackMan is within a radius of a, return a pointer to
+  //the FrackMan, otherwise return NULL
+  Actor* findNearbyFrackMan(Actor* a, int radius) const;
+
+  //Give the FrackMan a number of squirts equal to count
+  void giveFrackManWater(int count);
+
 private:
   void setDisplayText();
   std::string formatDisplayText(int score, int level, int lives, int health,

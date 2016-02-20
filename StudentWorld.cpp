@@ -2,6 +2,7 @@
 #include <iostream> //for debugging
 #include <string>
 #include <algorithm> //for remove_if
+#include <cmath> //for square root
 
 using namespace std;
 
@@ -32,6 +33,8 @@ int StudentWorld::init()
   m_actors.push_back(new Boulder(20, 30, this));
   m_actors.push_back(new Boulder(30, 40, this));
   m_actors.push_back(new Boulder(10, 50, this));
+  m_actors.push_back(new WaterPool(15, 20, this));
+  m_actors.push_back(new WaterPool(24, 35, this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -164,6 +167,29 @@ Actor* StudentWorld::getActor(int x, int y)
 void StudentWorld::giveActor(Actor* p)
 {
   m_actors.push_back(p);
+}
+
+Actor* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
+{
+  int thix = a->getX();
+  int thiy = a->getY();
+
+  int frackx = m_frackman->getX();
+  int fracky = m_frackman->getY();
+
+  double distanceSquared = (double) ((thix - frackx) * (thix - frackx)) + ((thiy-fracky) * (thiy - fracky));
+  double distance = sqrt(distanceSquared);
+
+  if(distance <= (double) radius)
+    return m_frackman;
+
+  return NULL;
+}
+
+void StudentWorld::giveFrackManWater(int count)
+{
+  int curWater = m_frackman->getWater();
+  m_frackman->setWater(curWater + count);
 }
 
 void StudentWorld::setDisplayText()
