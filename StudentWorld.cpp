@@ -27,14 +27,20 @@ StudentWorld::~StudentWorld()
 
 int StudentWorld::init()
 {
-  //TODO: Add actors
-  //Dummy implementation: just add three boulders
+  //Set number of barrels currently on oil field
+  m_barrels = 0;
+
+  //TODO: Add actors randomly
+  //Dummy implementation: just some stuff directly
   m_actors.push_back(new Boulder(10, 20, this));
   m_actors.push_back(new Boulder(20, 30, this));
   m_actors.push_back(new Boulder(30, 40, this));
   m_actors.push_back(new Boulder(10, 50, this));
   m_actors.push_back(new WaterPool(15, 20, this));
   m_actors.push_back(new WaterPool(24, 35, this));
+  m_actors.push_back(new OilBarrel(40, 45, this));
+  m_actors.push_back(new OilBarrel(35, 50, this));
+  m_actors.push_back(new OilBarrel(45, 55, this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -192,6 +198,11 @@ void StudentWorld::giveFrackManWater(int count)
   m_frackman->setWater(curWater + count);
 }
 
+int StudentWorld::addBarrels(int num)
+{
+  m_barrels += num;
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values
@@ -202,7 +213,7 @@ void StudentWorld::setDisplayText()
   int squirts = m_frackman->getWater();
   int gold = m_frackman->getGold();
   int sonar = m_frackman->getSonars();
-  int barrelsLeft = 2;
+  int barrelsLeft = m_barrels;
 
   //Create string to display using the values
   string s = formatDisplayText(score, level, lives, health, squirts,

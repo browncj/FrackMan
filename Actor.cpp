@@ -355,3 +355,50 @@ void WaterPool::doSomething()
   //Decrement the counter telling how long the pool will remain
   m_remainingTicks--;
 }
+
+OilBarrel::OilBarrel(int startX, int startY, StudentWorld* world)
+  : Actor(IID_BARREL, startX, startY, right, world, 1.0, 2)
+{
+  //Add to the counter for barrels
+  getWorld()->addBarrels(1);
+
+  //Remember that barrel is not currently visible
+  isVisible = false;
+}
+
+OilBarrel::~OilBarrel()
+{
+  //Remove one from the counter for oil barrels
+  getWorld()->addBarrels(-1);
+}
+
+void OilBarrel::doSomething()
+{
+  //Don't do anything if the barrel is dead
+  if(!isAlive())
+    return;
+
+  //TODO: Check if barrel of oil is not currently visible
+  //If FrackMan is within 4 units, away, barrel must make itself visible
+  Actor* FrackMan = getWorld()->findNearbyFrackMan(this, 4);
+  if(FrackMan != NULL && !isVisible){
+    //Set the barrel to visible
+    isVisible = true;
+    setVisible(true);
+    return;
+  }
+
+  //If barrel is visible and within 3 from the FrackMan, it gets picked up
+  Actor* FrackMan2 = getWorld()->findNearbyFrackMan(this, 3);
+  if(FrackMan2 != NULL){
+    //Kill the barrel
+    setState(false);
+
+    //Play the sound
+    getWorld()->playSound(SOUND_FOUND_OIL);
+
+    //Increase player's score by 1000 points
+    getWorld()->increaseScore(1000);
+  }
+  
+}

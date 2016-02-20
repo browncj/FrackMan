@@ -93,4 +93,14 @@ private:
   int m_remainingTicks;
 };
 
+class OilBarrel : public Actor
+{
+ public:
+  OilBarrel(int startX, int startY, StudentWorld* world);
+  ~OilBarrel();
+  void doSomething();
+ private:
+  bool isVisible; //keeps track of whether the barrel has been set to visible yet
+};
+
 #endif // ACTOR_H_
