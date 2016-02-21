@@ -37,6 +37,9 @@ public:
   //Give the FrackMan a number of squirts equal to count
   void giveFrackManWater(int count);
 
+  //Give FrackMan a number of sonars equal to count
+  void giveFrackManSonars(int count);
+
   //Add the specified number of barrels to the barrel counter
   int addBarrels(int num);
 

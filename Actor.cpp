@@ -209,6 +209,10 @@ int FrackMan::getSonars(){
   return m_sonar;
 }
 
+void FrackMan::setSonars(int sonars){
+  m_sonar = sonars;
+}
+
 int FrackMan::getGold(){
   return m_gold;
 }
@@ -428,6 +432,9 @@ SittingObject::SittingObject(int imageId, int startX, int startY, Direction star
 			     StudentWorld* world, float size, unsigned int depth)
   : Actor(imageId, startX, startY, startDirection, world, size, depth)
 {
+  //By default, ignore the tick countdown
+  m_remainingTicks = -1;
+
   //Assume that object does not start out visible
   m_visible = false;
 }
@@ -449,12 +456,25 @@ bool SittingObject::isVisible() const
   return m_visible;
 }
 
+int SittingObject::ticksLeft() const
+{
+  return m_remainingTicks;
+}
+
+void SittingObject::setTicks(int number)
+{
+  m_remainingTicks = number;
+}
+
 WaterPool::WaterPool(int startX, int startY, StudentWorld* world)
   : SittingObject(IID_WATER_POOL, startX, startY, right, world, 1.0, 2)
 {
-  setVisible(true);
+  //All water pools start off visible
+  makeSittingObjectVisible();
+
+  //Set number of ticks to remain based off of level
   int currLevel = getWorld()->getLevel();
-  m_remainingTicks = std::max(100, 300-10*currLevel);
+  setTicks(std::max(100, 300-10*currLevel));
 }
 
 WaterPool::~WaterPool()
@@ -475,7 +495,7 @@ void WaterPool::doSomething()
     //Play sound to indicate a goodie was picked up
     getWorld()->playSound(SOUND_GOT_GOODIE);
 
-    //Tell FrackMan that he got 5 new squirts of water
+    //Tell world to give FrackMan 5 squirts of water
     getWorld()->giveFrackManWater(5);
 
     //Increase the player's score by 100 points
@@ -483,11 +503,13 @@ void WaterPool::doSomething()
   }
   
   //If water pool has run out of ticks, set it to be removed
-  if( m_remainingTicks <= 0)
+  if( ticksLeft() == 0)
     setState(false);
 
   //Decrement the counter telling how long the pool will remain
-  m_remainingTicks--;
+  //if a positive number of ticks remain
+  if(ticksLeft() > 0)
+    setTicks(ticksLeft() - 1);
 }
 
 OilBarrel::OilBarrel(int startX, int startY, StudentWorld* world)
@@ -531,4 +553,49 @@ void OilBarrel::doSomething()
     getWorld()->increaseScore(1000);
   }
   
+}
+
+
+//TODO: Implement
+SonarKit::SonarKit(int startX, int startY, StudentWorld* world)
+  : SittingObject(IID_SONAR, startX, startY, right, world, 1.0, 2)
+{
+  //All sonar kits start out visible
+  makeSittingObjectVisible();
+
+  int currLevel = getWorld()->getLevel();
+  setTicks(std::max(100, 300-10*currLevel));
+}
+
+SonarKit::~SonarKit()
+{}
+
+void SonarKit::doSomething()
+{
+  //Do nothing if not currently active
+  if(!isAlive())
+    return;
+
+  //Check if within a radius of 3 of the FrackMan
+  Actor* FrackMan = getWorld()->findNearbyFrackMan(this, 3);
+  if(FrackMan != NULL){
+    //Water pool is dead
+    setState(false);
+
+    //Play sound
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+
+    //Tell world to give FrackMan a sonar
+    getWorld()->giveFrackManSonars(1);
+
+    //Increase the score by 75 points
+    getWorld()->increaseScore(75);
+  }
+
+  //Check if tick lifetime has elapsed
+  if( ticksLeft() == 0)
+    setState(false);
+
+  if(ticksLeft() > 0)
+    setTicks(ticksLeft() - 1);
 }

@@ -65,6 +65,8 @@ public:
   void setWater(int squirts);
 
   int getSonars();
+  void setSonars(int sonars);
+
   int getGold();
 
   void annoyAgent(unsigned int amount); //For annoying the FrackMan
@@ -132,8 +134,18 @@ public:
 
   //Returns true if object is currently visible
   bool isVisible() const;
+
+  //Return number of ticks left
+  int ticksLeft() const;
+
+  //Set ticks left to exist
+  void setTicks(int number);
 private:
   bool m_visible; //keeps track of if object has been made visible yet
+  
+  //Keeps track of how much longer object will remain on the field
+  //Is set to -1 if item is to remain forever
+  int m_remainingTicks;
 };
 
 class WaterPool : public SittingObject
@@ -143,7 +155,6 @@ public:
   ~WaterPool();
   void doSomething();
 private:
-  int m_remainingTicks;
 };
 
 class OilBarrel : public SittingObject
@@ -153,6 +164,15 @@ class OilBarrel : public SittingObject
   ~OilBarrel();
   void doSomething();
  private:
+};
+
+class SonarKit : public SittingObject
+{
+public:
+  SonarKit(int startX, int startY, StudentWorld* world);
+  ~SonarKit();
+  void doSomething();
+private:
 };
 
 #endif // ACTOR_H_

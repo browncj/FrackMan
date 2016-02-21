@@ -42,6 +42,7 @@ int StudentWorld::init()
   m_actors.push_back(new OilBarrel(35, 50, this));
   m_actors.push_back(new OilBarrel(45, 55, this));
   m_actors.push_back(new RegularProtester(this));
+  m_actors.push_back(new SonarKit(2, 55, this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -213,6 +214,12 @@ void StudentWorld::giveFrackManWater(int count)
 {
   int curWater = m_frackman->getWater();
   m_frackman->setWater(curWater + count);
+}
+
+void StudentWorld::giveFrackManSonars(int count)
+{
+  int curSonars = m_frackman->getSonars();
+  m_frackman->setSonars(curSonars + count);
 }
 
 int StudentWorld::addBarrels(int num)
