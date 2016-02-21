@@ -35,8 +35,9 @@ class Agent : public Actor
 	StudentWorld* world, float size, unsigned int depth, int health);
   ~Agent();
   //Right now, I'm not overriding void doSomething() here just to see what happens
-  virtual void annoyAgent() = 0; //annoy the current Agent
+  virtual void annoyAgent(unsigned int amount) = 0; //annoy the current Agent
   int getHealth(); //get health of the current Agent TODO: Make percentage??
+  void setHealth(int health); //set the health of the agent
  private:
   int m_health;
 };
@@ -66,13 +67,31 @@ public:
   int getSonars();
   int getGold();
 
-  void annoyAgent(); //For annoying the FrackMan
+  void annoyAgent(unsigned int amount); //For annoying the FrackMan
 private:
   void processMovement(Direction moveDir);
   //TODO: Figure out which ones of these variables actually need to be here
   int m_water;
   int m_sonar;
   int m_gold;
+};
+
+//TODO: Factor out into larger Protester class
+class RegularProtester : public Actor
+{
+public:
+  RegularProtester(StudentWorld* world);
+  ~RegularProtester();
+  void doSomething();
+  void addGold();
+  void annoyAgent(unsigned int amount);
+private:
+  //Private stuff
+  bool m_leaveOilField;
+  int ticksToWait; //Does not change except once every level. Ticks to wait every time
+  int curTicks; //Ticks left until an action is taken. Get descremented and reset
+
+  int m_waitUntilShout;
 };
 
 class Boulder : public Actor

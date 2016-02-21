@@ -41,6 +41,7 @@ int StudentWorld::init()
   m_actors.push_back(new OilBarrel(40, 45, this));
   m_actors.push_back(new OilBarrel(35, 50, this));
   m_actors.push_back(new OilBarrel(45, 55, this));
+  m_actors.push_back(new RegularProtester(this));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -175,7 +176,7 @@ void StudentWorld::giveActor(Actor* p)
   m_actors.push_back(p);
 }
 
-Actor* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
+FrackMan* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
 {
   int thix = a->getX();
   int thiy = a->getY();

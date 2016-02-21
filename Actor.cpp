@@ -59,6 +59,11 @@ int Agent::getHealth()
   return m_health;
 }
 
+void Agent::setHealth(int health)
+{
+  m_health = health;
+}
+
 Dirt::Dirt(int startX, int startY, StudentWorld* world)
   : Actor(IID_DIRT, startX, startY, right, world, 0.25, 3)
 {
@@ -205,9 +210,96 @@ int FrackMan::getGold(){
   return m_gold;
 }
 
-//TODO: Implement
-void FrackMan::annoyAgent()
+void FrackMan::annoyAgent(unsigned int amount)
+{
+  setHealth( getHealth() - amount );
+}
+
+//TODO: Implement constructor
+RegularProtester::RegularProtester(StudentWorld* world)
+  : Actor(IID_PROTESTER, 60, 60, left, world, 1.0, 0)
+{
+  //TODO: Decide how many squares to move left before possibly switching direction
+
+  //Protester starts out not trying to leave the oil field
+  m_leaveOilField = false;
+
+  //Protester can shout immediately
+  m_waitUntilShout = 0;
+
+  curTicks = ticksToWait = std::max((unsigned int) 0, 3 - (  (getWorld()->getLevel())   /4));
+
+  //Protesters start out visible
+  setVisible(true);
+}
+
+RegularProtester::~RegularProtester()
 {}
+
+void RegularProtester::doSomething()
+{
+  //If the protester is dead, don't do anything
+  if(!isAlive())
+    return;
+
+  //If curTicks is not zero, then the protester must wait
+  if( curTicks != 0 ){
+    curTicks--;
+    return;
+  }
+
+  //It is now time for the protester to move
+  curTicks = ticksToWait;
+
+  //Decrement counter until protester can shout again
+  if(m_waitUntilShout > 0)
+    m_waitUntilShout--;
+
+  if(m_leaveOilField){
+    //Do all the stuff necessary to leave the oil field
+
+    //Dummy implementation: Just die
+    setState(false); //TODO: Change
+
+    return;
+  }
+  //The protester is not currently trying to leave the oil field
+
+  //If protester is within 4 of FrackMan, and facing him, then annoy him
+  FrackMan* frackman = getWorld()->findNearbyFrackMan(this, 4);
+  if(frackman != NULL && m_waitUntilShout == 0)
+    {
+      //TODO: Check if facing in the right direction
+
+      //Play sound
+      getWorld()->playSound(SOUND_PROTESTER_YELL);
+
+      //Damage the FrackMan
+      frackman->annoyAgent(2);
+
+      //Do not let protester shout for 15 ticks
+      m_waitUntilShout = 15;
+    }
+
+  //TODO: if regular protester is straight line of frackman, more than
+  //4 units away, and isn't blocked by dirt/stones
+
+  //Otherwise, all other options exhausted. Just keep walking
+
+  //TONS OF OTHER WEIRD STUFF???
+}
+
+//TODO: Implement
+void RegularProtester::addGold()
+{
+  return;
+}
+
+//TODO: Implement
+void RegularProtester::annoyAgent(unsigned int amount)
+{
+  return;
+}
 
 Boulder::Boulder(int startX, int startY, StudentWorld* world)
   : Actor(IID_BOULDER, startX, startY, down, world, 1.0, 1)

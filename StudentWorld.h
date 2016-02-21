@@ -32,7 +32,7 @@ public:
 
   //If the FrackMan is within a radius of a, return a pointer to
   //the FrackMan, otherwise return NULL
-  Actor* findNearbyFrackMan(Actor* a, int radius) const;
+  FrackMan* findNearbyFrackMan(Actor* a, int radius) const;
 
   //Give the FrackMan a number of squirts equal to count
   void giveFrackManWater(int count);
