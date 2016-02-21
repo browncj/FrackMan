@@ -10,6 +10,7 @@ StudentWorld:
 	-Implement actual initialization. Right now, four boulders
 are just added in a set spot
     	 -If there are no oil barrels left, go on to the next level
+	 -Delete all actors in the dynamically allocated array when cleanup method is called
 
 Squirt:
 	-In frackman class: check if initial squirt location is occupied by

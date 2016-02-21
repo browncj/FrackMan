@@ -19,6 +19,7 @@ public:
   void setState(bool alive);
   virtual bool isBoulder() {return false;} //Returns true only if a boulder
   StudentWorld* getWorld(); //TODO: See if this can be made private
+  virtual void makeSittingObjectVisible();
   void newCoords(int& x, int& y, int dist, Direction dir); //modify x and y in direction of distance
 
 private:

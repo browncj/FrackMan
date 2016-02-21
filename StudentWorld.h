@@ -43,6 +43,10 @@ public:
   //Add the specified number of barrels to the barrel counter
   int addBarrels(int num);
 
+  //Use sonar to illuminate hidden objects within a radius of
+  //12 of the FrackMan
+  void useSonar(FrackMan* p);
+
 private:
   void setDisplayText();
   std::string formatDisplayText(int score, int level, int lives, int health,

@@ -16,6 +16,9 @@ StudentWorld* Actor::getWorld()
   return m_world;
 }
 
+void Actor::makeSittingObjectVisible()
+{}
+
 bool Actor::isAlive()
 {
   return m_alive;
@@ -144,7 +147,7 @@ void FrackMan::doSomething()
 	    else if(myDir == right)
 	      newSquirt = new Squirt(getX() + 4, getY(), myDir, getWorld());
 
-	    //Let StudentWorld class maange the squirt
+	    //Let StudentWorld class manage the squirt
 	    getWorld()->giveActor(newSquirt);
 	  }
 	  break;
@@ -157,7 +160,14 @@ void FrackMan::doSomething()
 	  break;
 	case 'z':
 	case 'Z':
-	  //TODO: Use a sonar
+	  //Decrement sonar counter
+	  m_sonar--;
+
+	  //Play sonar sound
+	  getWorld()->playSound(SOUND_SONAR);
+
+	  //Reveal nearby elements
+	  getWorld()->useSonar(this);
 	  break;
 	}
     }

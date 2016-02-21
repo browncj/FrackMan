@@ -227,6 +227,25 @@ int StudentWorld::addBarrels(int num)
   m_barrels += num;
 }
 
+void StudentWorld::useSonar(FrackMan* p)
+{
+  int xCoord = p->getX();
+  int yCoord = p->getY();
+
+  //For each member of array of Actors, call function to make it visible
+  //if it is within 12 distance from the FrackMan
+  for(size_t i = 0; i < m_actors.size(); i++){
+    int actorX = m_actors[i]->getX();
+    int actorY = m_actors[i]->getY();
+
+    int distanceSquared = (actorX-xCoord)*(actorX-xCoord)+(actorY-yCoord)*(actorY-yCoord);
+    double distance = (double) sqrt((double) distanceSquared);
+    if(distance <= 12.00){
+      m_actors[i]->makeSittingObjectVisible();
+    }
+  }
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values
