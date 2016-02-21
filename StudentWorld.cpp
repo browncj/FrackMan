@@ -134,7 +134,16 @@ void StudentWorld::cleanUp()
     }
   }
 
-  //TODO: Delete all other actors
+
+  int origSize = m_actors.size();
+  //Delete all dynamically allocated actors
+  for(size_t i = 0; i < origSize; i++){
+    //Free up the memory
+    delete m_actors[0];
+
+    //Remove from the vector
+    m_actors.erase( m_actors.begin() );
+  }
 
   return; 
 }
