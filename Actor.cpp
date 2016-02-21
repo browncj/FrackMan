@@ -424,8 +424,33 @@ void Squirt::doSomething()
   m_travelDistance--;
 }
 
+SittingObject::SittingObject(int imageId, int startX, int startY, Direction startDirection,
+			     StudentWorld* world, float size, unsigned int depth)
+  : Actor(imageId, startX, startY, startDirection, world, size, depth)
+{
+  //Assume that object does not start out visible
+  m_visible = false;
+}
+
+SittingObject::~SittingObject()
+{}
+
+void SittingObject::makeSittingObjectVisible()
+{
+  //Make the object visible
+  setVisible(true);
+
+  //Keep track of the visibility
+  m_visible = true;
+}
+
+bool SittingObject::isVisible() const
+{
+  return m_visible;
+}
+
 WaterPool::WaterPool(int startX, int startY, StudentWorld* world)
-  : Actor(IID_WATER_POOL, startX, startY, right, world, 1.0, 2)
+  : SittingObject(IID_WATER_POOL, startX, startY, right, world, 1.0, 2)
 {
   setVisible(true);
   int currLevel = getWorld()->getLevel();
@@ -466,13 +491,10 @@ void WaterPool::doSomething()
 }
 
 OilBarrel::OilBarrel(int startX, int startY, StudentWorld* world)
-  : Actor(IID_BARREL, startX, startY, right, world, 1.0, 2)
+  : SittingObject(IID_BARREL, startX, startY, right, world, 1.0, 2)
 {
   //Add to the counter for barrels
   getWorld()->addBarrels(1);
-
-  //Remember that barrel is not currently visible
-  isVisible = false;
 }
 
 OilBarrel::~OilBarrel()
@@ -490,10 +512,9 @@ void OilBarrel::doSomething()
   //TODO: Check if barrel of oil is not currently visible
   //If FrackMan is within 4 units, away, barrel must make itself visible
   Actor* FrackMan = getWorld()->findNearbyFrackMan(this, 4);
-  if(FrackMan != NULL && !isVisible){
+  if(FrackMan != NULL && !isVisible()){
     //Set the barrel to visible
-    isVisible = true;
-    setVisible(true);
+    makeSittingObjectVisible();
     return;
   }
 

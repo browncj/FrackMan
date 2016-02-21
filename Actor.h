@@ -118,7 +118,25 @@ class Squirt : public Actor
   int m_travelDistance;
 };
 
-class WaterPool : public Actor
+//Will describe OilBarrel, GoldNugget, SonarKit, and WaterPool
+class SittingObject : public Actor
+{
+public:
+
+  SittingObject(int imageId, int startX, int startY, Direction startDirection,
+		StudentWorld* world, float size, unsigned int depth);
+  ~SittingObject();
+
+  //Sets object visible while also keeping track that it is now visible
+  void makeSittingObjectVisible();
+
+  //Returns true if object is currently visible
+  bool isVisible() const;
+private:
+  bool m_visible; //keeps track of if object has been made visible yet
+};
+
+class WaterPool : public SittingObject
 {
 public:
   WaterPool(int startX, int startY, StudentWorld* world);
@@ -128,14 +146,13 @@ private:
   int m_remainingTicks;
 };
 
-class OilBarrel : public Actor
+class OilBarrel : public SittingObject
 {
  public:
   OilBarrel(int startX, int startY, StudentWorld* world);
   ~OilBarrel();
   void doSomething();
  private:
-  bool isVisible; //keeps track of whether the barrel has been set to visible yet
 };
 
 #endif // ACTOR_H_
