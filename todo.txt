@@ -19,3 +19,5 @@ Squirt:
 
 In general:
    -Try and make as many methods const as possible
+   -Try to tell if frackman is alive (in FrackMan::doSomething() and in StudentWorld::move()) using
+   isAlive(), not directly looking at the life count?

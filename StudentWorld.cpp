@@ -86,7 +86,23 @@ int StudentWorld::move()
     m_actors[i]->doSomething();
   }
 
-  //TODO: Right at this point, check if the FrackMan gave up
+  //Check if the FracKMan has been killed
+  if( m_frackman->getHealth() <= 0 ){
+    //Decrement the number of lives
+    decLives();
+
+    //Return that the player has died
+    return GWSTATUS_PLAYER_DIED;
+  }
+
+  //Check if all the oil barrels have been collected
+  if(m_barrels <= 0){
+    //Play sound
+    playSound(SOUND_FINISHED_LEVEL);
+
+    //Move onto next level
+    return GWSTATUS_FINISHED_LEVEL;
+  }
 
   //Delete all actors that are dead
   m_actors.erase(remove_if(m_actors.begin(), m_actors.end(), isDead), m_actors.end());
@@ -231,7 +247,7 @@ string StudentWorld::formatDisplayText(int score, int level, int lives, int heal
 			 int squirts, int gold, int sonar, int barrelsLeft)
 {
   string s = "Scr: ";
-  s += formatDigit(score, 8, true);
+  s += formatDigit(score, 6, true);
 
   s += " Lvl: ";
   s += formatDigit(level, 2, false);

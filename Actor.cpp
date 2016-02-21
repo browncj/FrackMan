@@ -91,7 +91,9 @@ FrackMan::~FrackMan()
 
 void FrackMan::doSomething()
 {
-  //TODO: Check if alive
+  //Check if dead, if so, do nothing
+  if(getHealth() <= 0)
+    return;
 
   //Check for and remove any dirt that the FrackMan overlaps
   //Also, play the digging sound if this occurs
@@ -147,7 +149,8 @@ void FrackMan::doSomething()
 	  }
 	  break;
 	case KEY_PRESS_ESCAPE:
-	  //TODO: FrackMan sets itself to dead
+	  //Kill the FrackMan
+	  setHealth(0);
 	  break;
 	case KEY_PRESS_TAB:
 	  //TODO: Drop a gold nugget for the protesters
