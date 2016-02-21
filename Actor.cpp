@@ -44,6 +44,21 @@ void Actor::newCoords(int& x, int& y, int dist, Direction dir)
     x += dist;
 }
 
+Agent::Agent(int imageId, int startX, int startY, Direction startDirection,
+	     StudentWorld* world, float size, unsigned int depth, int health)
+  : Actor(imageId, startX, startY, startDirection, world, size, depth)
+{
+  m_health = health;
+}
+
+Agent::~Agent()
+{}
+
+int Agent::getHealth()
+{
+  return m_health;
+}
+
 Dirt::Dirt(int startX, int startY, StudentWorld* world)
   : Actor(IID_DIRT, startX, startY, right, world, 0.25, 3)
 {
@@ -58,9 +73,8 @@ void Dirt::doSomething()
 {}
 
 FrackMan::FrackMan(StudentWorld* world)
-  : Actor(IID_PLAYER, 30, 60, right, world, 1.0, 0)
+  : Agent(IID_PLAYER, 30, 60, right, world, 1.0, 0, 10)
 {
-  m_health = 10;
   m_water = 5;
   m_sonar = 1;
   m_gold = 0;
@@ -175,10 +189,6 @@ void FrackMan::processMovement(Direction moveDir)
   return;
 }
 
-int FrackMan::getHealth(){
-  return m_health;
-}
-
 int FrackMan::getWater(){
   return m_water;
 }
@@ -194,6 +204,10 @@ int FrackMan::getSonars(){
 int FrackMan::getGold(){
   return m_gold;
 }
+
+//TODO: Implement
+void FrackMan::annoyAgent()
+{}
 
 Boulder::Boulder(int startX, int startY, StudentWorld* world)
   : Actor(IID_BOULDER, startX, startY, down, world, 1.0, 1)

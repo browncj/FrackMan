@@ -26,6 +26,21 @@ private:
   bool m_alive;
 };
 
+//For the FrackMan and protesters
+//Can be annoyed
+class Agent : public Actor
+{
+ public:
+  Agent(int imageId, int startX, int startY, Direction startDirection,
+	StudentWorld* world, float size, unsigned int depth, int health);
+  ~Agent();
+  //Right now, I'm not overriding void doSomething() here just to see what happens
+  virtual void annoyAgent() = 0; //annoy the current Agent
+  int getHealth(); //get health of the current Agent TODO: Make percentage??
+ private:
+  int m_health;
+};
+
 class Dirt : public Actor
 {
 public:
@@ -37,23 +52,24 @@ private:
 
 //TODO: This class will probably end up deriving from
 //some other, more specific base class
-class FrackMan : public Actor
+class FrackMan : public Agent
 {
 public:
   FrackMan(StudentWorld* world);
   ~FrackMan();
   void doSomething();
-  int getHealth();
+
 
   int getWater();
   void setWater(int squirts);
 
   int getSonars();
   int getGold();
+
+  void annoyAgent(); //For annoying the FrackMan
 private:
   void processMovement(Direction moveDir);
   //TODO: Figure out which ones of these variables actually need to be here
-  int m_health;
   int m_water;
   int m_sonar;
   int m_gold;
