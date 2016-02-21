@@ -160,14 +160,16 @@ void FrackMan::doSomething()
 	  break;
 	case 'z':
 	case 'Z':
-	  //Decrement sonar counter
-	  m_sonar--;
+	  if(m_sonar > 0){
+	    //Decrement sonar counter
+	    m_sonar--;
 
-	  //Play sonar sound
-	  getWorld()->playSound(SOUND_SONAR);
+	    //Play sonar sound
+	    getWorld()->playSound(SOUND_SONAR);
 
-	  //Reveal nearby elements
-	  getWorld()->useSonar(this);
+	    //Reveal nearby elements
+	    getWorld()->useSonar(this);
+	  }
 	  break;
 	}
     }
