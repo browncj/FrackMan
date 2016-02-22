@@ -46,9 +46,15 @@ public:
   //Use sonar to illuminate hidden objects within a radius of
   //12 of the FrackMan
   void useSonar(FrackMan* p);
+  
+  //Returns true if an actor is allowed to move to (x, y)
+  //Return false otherwise
+  //if canMoveThroughDirt is false, then dirt blocks the actor
+  bool actorCanMoveHere(int x, int y, bool canMoveThroughDirt);
 
 private:
   void setDisplayText();
+  bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad);
   std::string formatDisplayText(int score, int level, int lives, int health,
 				int squirts, int gold, int sonar, int barrelsLeft);
   std::string formatDigit(int input, int totalDigits, bool zeros);

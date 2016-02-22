@@ -22,6 +22,9 @@ public:
   virtual void makeSittingObjectVisible();
   void newCoords(int& x, int& y, int dist, Direction dir); //modify x and y in direction of distance
 
+  //Returns true if other actors may pass through this one
+  //By default, actors can be passed through
+  virtual bool blocksMovement() const {return false;}
 private:
   StudentWorld* m_world;
   bool m_alive;
@@ -104,6 +107,7 @@ class Boulder : public Actor
   ~Boulder();
   void doSomething();
   virtual bool isBoulder() {return true;} //for checking if Actor is a boulder
+  bool blocksMovement() const {return true;} //boulders cannot be passed through
  private:
   //Enumerate the three possible states of a boulder
   enum boulderState {stable, waiting, falling};

@@ -255,6 +255,35 @@ void StudentWorld::useSonar(FrackMan* p)
   }
 }
 
+//Return true if an actor can move to (x, y)
+//Return false otherwise
+//If canMoveThroughDirt is false, then check for dirt
+bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt)
+{
+  //Check for out-of-bounds
+  if(x < 0 || x > 56 || y > 60 || y < 0)
+    return false;
+
+  //If there is dirt, here, then no one can move here if canMoveThroughDirt
+  //is not specified
+  if(!canMoveThroughDirt){
+    if(isDirt(x, y))
+      return false;
+  }
+
+  //If there is, at this point, an actor that cannot be passed through,
+  //then return false
+  for(size_t i = 0; i < m_actors.size(); i++){
+    //Ensure that actor is within radius of 3 of spot being examined
+    if(withinRadiusOf(m_actors[i]->getX(), m_actors[i]->getY(), x, y, 3)){
+      if(m_actors[i]->blocksMovement())
+	return false;
+    }
+  }
+
+  return true;
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values
@@ -277,7 +306,19 @@ void StudentWorld::setDisplayText()
   return;
 }
 
-//TODO: Implement (also, to use leading zeros)
+//Return true if (x1, y1) is within a radius of rad from (x2, y2)
+//Return false otherwise
+bool StudentWorld::withinRadiusOf(int x1, int y1, int x2, int y2, int rad)
+{
+  double distanceSquared = (double) ((x1-x2) * (x1-x2)) + ((y1-y2) * (y1-y2));
+  double distance = sqrt(distanceSquared);
+
+  if(distance <= (double) rad)
+    return true;
+
+  return false;
+}
+
 string StudentWorld::formatDisplayText(int score, int level, int lives, int health,
 			 int squirts, int gold, int sonar, int barrelsLeft)
 {

@@ -189,19 +189,19 @@ void FrackMan::processMovement(Direction moveDir)
     //ensuring that he does not exit the oil field
     //TODO: Make sure FrackMan can't move near a boulder, etc.
     if(moveDir == left){
-      if(getX() != 0)
+      if(getWorld()->actorCanMoveHere(getX()-1, getY(), true))
 	moveTo(getX() - 1, getY());
     }
     else if(moveDir == right){
-      if(getX() != 56)
+      if(getWorld()->actorCanMoveHere(getX()+1, getY(), true))//if(getX() != 56)
 	moveTo(getX() + 1, getY());
     }
     else if(moveDir == up){
-      if(getY() != 60)
+      if(getWorld()->actorCanMoveHere(getX(),getY()+1, true))
 	moveTo(getX(), getY() + 1);
     }
     else if(moveDir == down){
-      if(getY() != 0)
+      if(getWorld()->actorCanMoveHere(getX(),getY()-1, true))//if(getY() != 0)
 	moveTo(getX(), getY() - 1);
     }
   }

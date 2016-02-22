@@ -1,6 +1,7 @@
      Frackman:
 	-A lot of stuff, including checking of the FrackMan is being blocked
 	by a boulder
+	-Make sure that ENTIRE boulder sprite blocks FrackMan
 
 Boulder:
 	-In doSomething() method, check if boulder comes within a certain
