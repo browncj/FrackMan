@@ -187,7 +187,6 @@ void FrackMan::processMovement(Direction moveDir)
   else{
     //Try to move FrackMan one step in direction specified,
     //ensuring that he does not exit the oil field
-    //TODO: Make sure FrackMan can't move near a boulder, etc.
     if(moveDir == left){
       if(getWorld()->actorCanMoveHere(getX()-1, getY(), true))
 	moveTo(getX() - 1, getY());
@@ -234,11 +233,12 @@ void FrackMan::annoyAgent(unsigned int amount)
   setHealth( getHealth() - amount );
 }
 
-//TODO: Implement constructor
 RegularProtester::RegularProtester(StudentWorld* world)
   : Actor(IID_PROTESTER, 60, 60, left, world, 1.0, 0)
 {
-  //TODO: Decide how many squares to move left before possibly switching direction
+  //Decide how many squares to move left before possibly switching direction
+  //Number must be between 8 and 60, inclusive
+  m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
 
   //Protester starts out not trying to leave the oil field
   m_leaveOilField = false;
@@ -298,14 +298,49 @@ void RegularProtester::doSomething()
 
       //Do not let protester shout for 15 ticks
       m_waitUntilShout = 15;
+
+      //Do not do anything else this tick
+      return;
     }
 
   //TODO: if regular protester is straight line of frackman, more than
   //4 units away, and isn't blocked by dirt/stones
 
-  //Otherwise, all other options exhausted. Just keep walking
+  //The protester cannot directly see the FracKMan
+  m_squaresMoveCurDirection--;
 
-  //TONS OF OTHER WEIRD STUFF???
+  if(m_squaresMoveCurDirection <= 0){
+    //At this point, change directions
+    Direction newDir = (Direction)  getWorld()->randInt(1, 4);
+
+    //TODO: Check for blockage in new direction
+
+    setDirection(newDir);
+
+    m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+
+    //Do not return out of function, continue on with next step
+  }
+  else if(true){
+    //sitting at intersection where it could turn and move one square
+    //in perpendicualr direction
+    //has not made perpendicular turn in last 200 non-resting ticks
+  }
+
+  //Try to take one step in direction that is being faced
+  int newX = getX();
+  int newY = getY();
+  newCoords(newX, newY, 1, getDirection());
+
+  //If protester is starting out, allow it to move onto oil field
+  if(getX() > 56 && getDirection() == left)
+    moveTo(newX, newY);
+  //Else check for new position being valid
+  else if(getWorld()->actorCanMoveHere(newX, newY, false))
+    moveTo(newX, newY);
+  else
+    //Protester cannot move, so take no more steps in this direction
+    m_squaresMoveCurDirection = 0;
 }
 
 //TODO: Implement

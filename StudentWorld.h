@@ -52,6 +52,9 @@ public:
   //if canMoveThroughDirt is false, then dirt blocks the actor
   bool actorCanMoveHere(int x, int y, bool canMoveThroughDirt);
 
+  //Return a random interger between min and max, inclusive
+  int randInt(int min, int max);
+
 private:
   void setDisplayText();
   bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad);

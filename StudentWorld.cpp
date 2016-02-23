@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm> //for remove_if
 #include <cmath> //for square root
+#include <random> //for random numbers
 
 using namespace std;
 
@@ -266,9 +267,16 @@ bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt)
 
   //If there is dirt, here, then no one can move here if canMoveThroughDirt
   //is not specified
+
+  //NOTE/TODO: Right now, the +4 (for sprite size) is hardcoded
+  //possibly change in the future?
   if(!canMoveThroughDirt){
-    if(isDirt(x, y))
-      return false;
+    for(int i = x; i < x + 4 && i < 60; i++){
+      for(int k = y; k < y + 4 && k < 60; k++){
+	if(isDirt(i, k))
+	  return false;
+      }
+    }
   }
 
   //If there is, at this point, an actor that cannot be passed through,
@@ -284,6 +292,16 @@ bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt)
   return true;
 }
 
+// Return a random int from min to max, inclusive
+int StudentWorld::randInt(int min, int max)
+{
+  if (max < min)
+    swap(max, min);
+  static random_device rd;
+  static mt19937 generator(rd());
+  uniform_int_distribution<> distro(min, max);
+  return distro(generator);
+}
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values
@@ -320,7 +338,7 @@ bool StudentWorld::withinRadiusOf(int x1, int y1, int x2, int y2, int rad)
 }
 
 string StudentWorld::formatDisplayText(int score, int level, int lives, int health,
-			 int squirts, int gold, int sonar, int barrelsLeft)
+				       int squirts, int gold, int sonar, int barrelsLeft)
 {
   string s = "Scr: ";
   s += formatDigit(score, 6, true);

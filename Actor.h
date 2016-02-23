@@ -94,6 +94,9 @@ public:
 private:
   //Private stuff
   bool m_leaveOilField;
+
+  int m_squaresMoveCurDirection;
+
   int ticksToWait; //Does not change except once every level. Ticks to wait every time
   int curTicks; //Ticks left until an action is taken. Get descremented and reset
 
