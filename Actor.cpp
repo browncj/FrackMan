@@ -11,7 +11,7 @@ Actor::Actor(int imageId, int startX, int startY, Direction startDirection,
   m_alive = true;
 }
 
-StudentWorld* Actor::getWorld()
+StudentWorld* Actor::getWorld() const
 {
   return m_world;
 }
@@ -19,7 +19,7 @@ StudentWorld* Actor::getWorld()
 void Actor::makeSittingObjectVisible()
 {}
 
-bool Actor::isAlive()
+bool Actor::isAlive() const
 {
   return m_alive;
 }
@@ -35,7 +35,7 @@ Actor::~Actor()
 //Given an (x, y) pair and a direction, this function modifies
 //x and y by moving the coordinate dist units in the direction
 //of dir
-void Actor::newCoords(int& x, int& y, int dist, Direction dir)
+void Actor::newCoords(int& x, int& y, int dist, Direction dir) const
 {
   if(dir == up)
     y += dist;
@@ -57,7 +57,7 @@ Agent::Agent(int imageId, int startX, int startY, Direction startDirection,
 Agent::~Agent()
 {}
 
-int Agent::getHealth()
+int Agent::getHealth() const
 {
   return m_health;
 }
@@ -208,7 +208,8 @@ void FrackMan::processMovement(Direction moveDir)
   return;
 }
 
-int FrackMan::getWater(){
+int FrackMan::getWater() const
+{
   return m_water;
 }
 
@@ -216,7 +217,8 @@ void FrackMan::setWater(int squirts){
   m_water = squirts;
 }
 
-int FrackMan::getSonars(){
+int FrackMan::getSonars() const
+{
   return m_sonar;
 }
 
@@ -224,7 +226,8 @@ void FrackMan::setSonars(int sonars){
   m_sonar = sonars;
 }
 
-int FrackMan::getGold(){
+int FrackMan::getGold() const
+{
   return m_gold;
 }
 

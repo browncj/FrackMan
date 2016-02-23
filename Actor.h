@@ -15,12 +15,12 @@ public:
 	StudentWorld* world, float size, unsigned int depth);
   virtual ~Actor();
   virtual void doSomething() = 0;
-  bool isAlive();
+  bool isAlive() const;
   void setState(bool alive);
-  virtual bool isBoulder() {return false;} //Returns true only if a boulder
-  StudentWorld* getWorld(); //TODO: See if this can be made private
+  virtual bool isBoulder() const {return false;} //Returns true only if a boulder
+  StudentWorld* getWorld() const; //TODO: See if this can be made private
   virtual void makeSittingObjectVisible();
-  void newCoords(int& x, int& y, int dist, Direction dir); //modify x and y in direction of distance
+  void newCoords(int& x, int& y, int dist, Direction dir) const; //modify x and y in direction of distance
 
   //Returns true if other actors may pass through this one
   //By default, actors can be passed through
@@ -40,7 +40,7 @@ class Agent : public Actor
   ~Agent();
   //Right now, I'm not overriding void doSomething() here just to see what happens
   virtual void annoyAgent(unsigned int amount) = 0; //annoy the current Agent
-  int getHealth(); //get health of the current Agent TODO: Make percentage??
+  int getHealth() const; //get health of the current Agent TODO: Make percentage??
   void setHealth(int health); //set the health of the agent
  private:
   int m_health;
@@ -65,13 +65,13 @@ public:
   void doSomething();
 
 
-  int getWater();
+  int getWater() const;
   void setWater(int squirts);
 
-  int getSonars();
+  int getSonars() const;
   void setSonars(int sonars);
 
-  int getGold();
+  int getGold() const;
 
   void annoyAgent(unsigned int amount); //For annoying the FrackMan
 private:
@@ -109,7 +109,7 @@ class Boulder : public Actor
   Boulder(int startX, int startY, StudentWorld* world);
   ~Boulder();
   void doSomething();
-  virtual bool isBoulder() {return true;} //for checking if Actor is a boulder
+  virtual bool isBoulder() const {return true;} //for checking if Actor is a boulder
   bool blocksMovement() const {return true;} //boulders cannot be passed through
  private:
   //Enumerate the three possible states of a boulder

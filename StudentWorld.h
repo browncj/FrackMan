@@ -22,7 +22,7 @@ public:
   bool destroyDirt(int x, int y);
 
   //returns true if dirt is at (x, y)
-  bool isDirt(int x, int y);
+  bool isDirt(int x, int y) const;
 
   //returns a pointer to any actor at (x, y), otherwise returns NULL
   Actor* getActor(int x, int y);
@@ -50,17 +50,17 @@ public:
   //Returns true if an actor is allowed to move to (x, y)
   //Return false otherwise
   //if canMoveThroughDirt is false, then dirt blocks the actor
-  bool actorCanMoveHere(int x, int y, bool canMoveThroughDirt);
+  bool actorCanMoveHere(int x, int y, bool canMoveThroughDirt) const;
 
   //Return a random interger between min and max, inclusive
-  int randInt(int min, int max);
+  int randInt(int min, int max) const;
 
 private:
   void setDisplayText();
-  bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad);
+  bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad) const;
   std::string formatDisplayText(int score, int level, int lives, int health,
-				int squirts, int gold, int sonar, int barrelsLeft);
-  std::string formatDigit(int input, int totalDigits, bool zeros);
+				int squirts, int gold, int sonar, int barrelsLeft) const;
+  std::string formatDigit(int input, int totalDigits, bool zeros) const;
   std::vector<Actor*> m_actors;
   int m_barrels; //Number of barrels left on current level
   Dirt* m_dirt[60][60];

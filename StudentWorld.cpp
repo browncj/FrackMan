@@ -169,7 +169,7 @@ bool StudentWorld::destroyDirt(int x, int y)
   return false;
 }
 
-bool StudentWorld::isDirt(int x, int y)
+bool StudentWorld::isDirt(int x, int y) const
 {
   for(int i = 0; i < 60; i++){
     for(int k = 0; k < 60; k++){
@@ -259,7 +259,7 @@ void StudentWorld::useSonar(FrackMan* p)
 //Return true if an actor can move to (x, y)
 //Return false otherwise
 //If canMoveThroughDirt is false, then check for dirt
-bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt)
+bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt) const
 {
   //Check for out-of-bounds
   if(x < 0 || x > 56 || y > 60 || y < 0)
@@ -293,7 +293,7 @@ bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt)
 }
 
 // Return a random int from min to max, inclusive
-int StudentWorld::randInt(int min, int max)
+int StudentWorld::randInt(int min, int max) const
 {
   if (max < min)
     swap(max, min);
@@ -326,7 +326,7 @@ void StudentWorld::setDisplayText()
 
 //Return true if (x1, y1) is within a radius of rad from (x2, y2)
 //Return false otherwise
-bool StudentWorld::withinRadiusOf(int x1, int y1, int x2, int y2, int rad)
+bool StudentWorld::withinRadiusOf(int x1, int y1, int x2, int y2, int rad) const
 {
   double distanceSquared = (double) ((x1-x2) * (x1-x2)) + ((y1-y2) * (y1-y2));
   double distance = sqrt(distanceSquared);
@@ -338,7 +338,7 @@ bool StudentWorld::withinRadiusOf(int x1, int y1, int x2, int y2, int rad)
 }
 
 string StudentWorld::formatDisplayText(int score, int level, int lives, int health,
-				       int squirts, int gold, int sonar, int barrelsLeft)
+				       int squirts, int gold, int sonar, int barrelsLeft) const
 {
   string s = "Scr: ";
   s += formatDigit(score, 6, true);
@@ -372,7 +372,7 @@ string StudentWorld::formatDisplayText(int score, int level, int lives, int heal
 //that input, plus any number of leading characters necessary.
 //if zeros is true, then the leading chars will be zeros, otherwise, they
 //will be spaces
-string StudentWorld::formatDigit(int input, int totalDigits, bool zeros)
+string StudentWorld::formatDigit(int input, int totalDigits, bool zeros) const
 {
   char filler;
 
