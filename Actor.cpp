@@ -444,6 +444,15 @@ void Boulder::doSomething()
     }
   }
   else if(m_state == falling){
+    //Check if FrackMan is nearby; if so, annoy him
+    FrackMan* f = getWorld()->findNearbyFrackMan(this, 3);
+    if(f != NULL){
+      f->annoyAgent(100);
+    }
+
+    //Annoy any protesters that are too close
+    getWorld()->annoyNearbyProtesters(this, 3, 100);
+
     //The boulder must die if it is at the bottom of the oil field
     bool fall = true;
     if(getY() == 0)
@@ -471,9 +480,6 @@ void Boulder::doSomething()
       moveTo(getX(), getY() - 1);
     else //otherwise, mark the boulder for deletion
       setState(false);
-
-    //TODO: Check if boulder comes within radius of 3 of
-    //a protester or the FrackMan
   }
 }
 
