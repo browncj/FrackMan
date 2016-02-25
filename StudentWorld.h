@@ -34,6 +34,11 @@ public:
   //the FrackMan, otherwise return NULL
   FrackMan* findNearbyFrackMan(Actor* a, int radius) const;
 
+  //Annoy all nearby protesters within a radius of radius by the
+  //amount specified
+  //return true if at least one protester is annoyed
+  bool annoyNearbyProtesters(Actor* a, int radius, int amount);
+
   //Give the FrackMan a number of squirts equal to count
   void giveFrackManWater(int count);
 

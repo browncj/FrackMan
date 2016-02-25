@@ -7,15 +7,11 @@ StudentWorld:
 added in set spots
     	 -If there are no oil barrels left, go on to the next level
 
-Squirt:
-	-In frackman class: check if initial squirt location is occupied by
-	dirt object, or within a radius of a boulder object
-	-In squirt class: check if within 3.0 radius of a protester, also
-	check if gets blocked by dirt or a boulder
-	
 Protester:
 	-Implement rest of logic for protester movement
 
+FrackMan:
+	-Do not add squirt onto field if starting location is not valid
 
 -Try and make as many methods const as possible
 -Try to tell if frackman is alive (in FrackMan::doSomething() and in StudentWorld::move()) using

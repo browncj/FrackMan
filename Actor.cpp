@@ -237,7 +237,7 @@ void FrackMan::annoyAgent(unsigned int amount)
 }
 
 RegularProtester::RegularProtester(StudentWorld* world)
-  : Actor(IID_PROTESTER, 60, 60, left, world, 1.0, 0)
+  : Agent(IID_PROTESTER, 60, 60, left, world, 1.0, 0, 5)
 {
   //Decide how many squares to move left before possibly switching direction
   //Number must be between 8 and 60, inclusive
@@ -352,10 +352,43 @@ void RegularProtester::addGold()
   return;
 }
 
-//TODO: Implement
 void RegularProtester::annoyAgent(unsigned int amount)
 {
-  return;
+  //Protester cannot be annoyed if it is leaving the oil field
+  if (m_leaveOilField)
+    return;
+
+  //Subtract the damage from the protester's health
+  setHealth( getHealth() - amount );
+
+  //Play sound if protester is still alive
+  if(getHealth() > 0){
+    getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
+
+    unsigned int maxPartner = 50;
+
+    //Extend the resting state of the protester
+    curTicks = std::max(maxPartner, 100-(getWorld()->getLevel() * 10 ));
+  }
+  else if(getHealth() <= 0){
+    //The protester will now try to leave the oil field
+    m_leaveOilField = true;
+    getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
+
+    //Do something on the very next tick
+    curTicks = 0;
+
+    //Check if protester was killed by squirt
+    if(amount == 2){
+      //add 100 points
+      getWorld()->increaseScore(100);
+    }
+    else if(amount == 100){ //check if killed by boulder
+      //add 500 points
+      getWorld()->increaseScore(500);
+    }
+    
+  }
 }
 
 Boulder::Boulder(int startX, int startY, StudentWorld* world)
@@ -460,6 +493,8 @@ Squirt::~Squirt()
 void Squirt::doSomething()
 {
   //if within 3 radius of protester, causes 2 points of annoyance and then dies
+  if( getWorld()->annoyNearbyProtesters(this, 3, 2) )
+    setState(false);
 
   //if has traveled full travel distance, sets its state to dead
   if (m_travelDistance == 0)
@@ -467,11 +502,14 @@ void Squirt::doSomething()
 
   //otherwise, checks if it can move one square in facing direction
   //if there is a boulder or dirt there, it sets its location to dead
-
-  //otherwise, the squirt moves one square forward in its currently-facing direction
   int newX = getX();
   int newY = getY();
   newCoords(newX, newY, 4, getDirection());
+  if( !getWorld()->actorCanMoveHere(newX, newY, false) ){
+    setState(false);
+  }
+
+  //otherwise, the squirt moves one square forward in its currently-facing direction
   moveTo(newX, newY);
 
   //Also decrement the travel distance counter

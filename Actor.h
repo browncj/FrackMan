@@ -17,9 +17,11 @@ public:
   virtual void doSomething() = 0;
   bool isAlive() const;
   void setState(bool alive);
+  virtual bool isProtester() const {return false;} //returns true only if a protester
   virtual bool isBoulder() const {return false;} //Returns true only if a boulder
   StudentWorld* getWorld() const; //TODO: See if this can be made private
   virtual void makeSittingObjectVisible();
+  virtual void annoyAgent(unsigned int amount) {return;} //for annoying agents
   void newCoords(int& x, int& y, int dist, Direction dir) const; //modify x and y in direction of distance
 
   //Returns true if other actors may pass through this one
@@ -39,7 +41,6 @@ class Agent : public Actor
 	StudentWorld* world, float size, unsigned int depth, int health);
   ~Agent();
   //Right now, I'm not overriding void doSomething() here just to see what happens
-  virtual void annoyAgent(unsigned int amount) = 0; //annoy the current Agent
   int getHealth() const; //get health of the current Agent TODO: Make percentage??
   void setHealth(int health); //set the health of the agent
  private:
@@ -83,7 +84,7 @@ private:
 };
 
 //TODO: Factor out into larger Protester class
-class RegularProtester : public Actor
+class RegularProtester : public Agent
 {
 public:
   RegularProtester(StudentWorld* world);
@@ -91,6 +92,7 @@ public:
   void doSomething();
   void addGold();
   void annoyAgent(unsigned int amount);
+  bool isProtester() const {return true;} //returns true since is a protester
 private:
   //Private stuff
   bool m_leaveOilField;

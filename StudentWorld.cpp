@@ -220,6 +220,31 @@ FrackMan* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
   return NULL;
 }
 
+//annoy all protesters within a certain radius by the given amount
+//if at least one protester is annoyed, return true
+//otherwise, return false
+bool StudentWorld::annoyNearbyProtesters(Actor* a, int radius, int amount)
+{
+  int x = a->getX();
+  int y = a->getY();
+
+  bool flag = false;
+
+  for(size_t i = 0; i < m_actors.size(); i++){
+    Actor* t = m_actors[i];
+    //Test if actor is within the proper radius
+    if( withinRadiusOf(x, y, t->getX(), t->getY(), radius) ){
+      //Test if the actor being examined is a protester
+      if( t->isProtester() ){
+	//Annoy the protester
+	t->annoyAgent(amount);
+	flag = true;
+      }
+    }
+  }
+  return flag;
+}
+
 void StudentWorld::giveFrackManWater(int count)
 {
   int curWater = m_frackman->getWater();
