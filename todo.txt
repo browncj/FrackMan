@@ -3,7 +3,12 @@ StudentWorld:
 added in set spots
 
 Protester:
-	-Implement rest of logic for protester movement
+	-Implement algorithm for leaving the oil field
+	-Check if protester has straight line of sight with FrackMan
+	-check if protester is sitting at an intersection
+
+HardcoreProtester:
+	-everything
 
 FrackMan:
 	-Do not add squirt onto field if starting location is not valid
