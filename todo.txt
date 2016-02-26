@@ -4,8 +4,7 @@ added in set spots
 
 Protester:
 	-Implement algorithm for leaving the oil field
-	-Check if protester has straight line of sight with FrackMan
-	-check if protester is sitting at an intersection
+	-prevent protester from just spinning around in circles
 	-Optimize maze exit algorithm. Also, prevent FrackMan from going back and forth. fix segmentation
 	fault?
 

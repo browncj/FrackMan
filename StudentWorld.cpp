@@ -398,6 +398,29 @@ Actor::Direction StudentWorld::leaveFieldDirection(Actor* p) const
   return Actor::down;
 }
 
+//return true if there is an uninterrupted line of sight to the Frackman
+//in the direction indicated from the actor
+bool StudentWorld::openSightFrackMan(int x, int y, Actor::Direction dir) const
+{
+  //if at the coordinates of the frackman, return true
+  if(x == m_frackman->getX() && y == m_frackman->getY())
+    return true;
+
+  //if coordinate is not passable, return false
+  if(!actorCanMoveHere(x, y, false))
+    return false;
+
+  //recursively keep going in given direction
+  if(dir  == Actor::left)
+    return openSightFrackMan(x - 1, y, Actor::left);
+  else if(dir == Actor::right)
+    return openSightFrackMan(x + 1, y, Actor::right);
+  else if(dir == Actor::down)
+    return openSightFrackMan(x, y - 1, Actor::down);
+  else
+    return openSightFrackMan(x, y + 1, Actor::up);
+}
+
 //if oil field can be left from (xStart, yStart) without going over (xPrev, yPrev),
 //return true. Otherwise, return false
 bool StudentWorld::canLeaveFieldFromHere(int xPrev, int yPrev, int xStart, int yStart) const

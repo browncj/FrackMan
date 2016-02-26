@@ -74,6 +74,10 @@ public:
   //the oil field
   Actor::Direction leaveFieldDirection(Actor* p) const;
 
+  //return true if there is an uninterrupted line of sight to the
+  //FrackMan in the direction indicated
+  bool openSightFrackMan(int x, int y, Actor::Direction dir) const;
+
 private:
   //A structure for keeping track of coordinates
   class Coord

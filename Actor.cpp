@@ -327,8 +327,45 @@ void RegularProtester::doSomething()
       return;
     }
 
-  //TODO: if regular protester is straight line of frackman, more than
-  //4 units away, and isn't blocked by dirt/stones
+  //if regular protester is straight line of frackman, more than
+  //4 units away, and isn't blocked by dirt/stones, then face that
+  //direction and take a step toward the frackman
+  if(getWorld()->openSightFrackMan(getX(), getY(), left)){
+    setDirection(left);
+    int x = getX();
+    int y = getY();
+    newCoords(x, y, 1, left);
+    moveTo(x, y);
+    m_squaresMoveCurDirection = 0;
+    return;
+  }
+  else if(getWorld()->openSightFrackMan(getX(), getY(), right)){
+    setDirection(right);
+    int x = getX();
+    int y = getY();
+    newCoords(x, y, 1, right);
+    moveTo(x, y);
+    m_squaresMoveCurDirection = 0;
+    return;
+  }
+  else if(getWorld()->openSightFrackMan(getX(), getY(), up)){
+    setDirection(up);
+    int x = getX();
+    int y = getY();
+    newCoords(x, y, 1, up);
+    moveTo(x, y);
+    m_squaresMoveCurDirection = 0;
+    return;
+  }
+  else if(getWorld()->openSightFrackMan(getX(), getY(), down)){
+    setDirection(down);
+    int x = getX();
+    int y = getY();
+    newCoords(x, y, 1, down);
+    moveTo(x, y);
+    m_squaresMoveCurDirection = 0;
+    return;
+  }
 
   //The protester cannot directly see the FracKMan
   m_squaresMoveCurDirection--;
