@@ -156,7 +156,14 @@ void FrackMan::doSomething()
 	  setHealth(0);
 	  break;
 	case KEY_PRESS_TAB:
-	  //TODO: Drop a gold nugget for the protesters
+	  //Drop a gold nugget to bribe protesters if one is available
+	  if(m_gold > 0){
+	    m_gold--;
+	    GoldNugget* newNugget = new GoldNugget(getX(), getY(), getWorld(), true, false, false);
+
+	    //Let the StudentWorld class handle the new nugget
+	    getWorld()->giveActor(newNugget);
+	  }
 	  break;
 	case 'z':
 	case 'Z':
@@ -346,10 +353,15 @@ void RegularProtester::doSomething()
     m_squaresMoveCurDirection = 0;
 }
 
-//TODO: Implement
 void RegularProtester::addGold()
 {
-  return;
+  //play the "I'm rich!" sound effect
+  getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
+
+  //note: gold nugget class handled increasing score for bribery
+  
+  //the protester now decides to leave the oil field
+  m_leaveOilField = true;
 }
 
 void RegularProtester::annoyAgent(unsigned int amount)
@@ -625,7 +637,7 @@ void OilBarrel::doSomething()
   if(!isAlive())
     return;
 
-  //TODO: Check if barrel of oil is not currently visible
+  //Check if barrel of oil is not currently visible
   //If FrackMan is within 4 units, away, barrel must make itself visible
   Actor* FrackMan = getWorld()->findNearbyFrackMan(this, 4);
   if(FrackMan != NULL && !isVisible()){
@@ -650,7 +662,6 @@ void OilBarrel::doSomething()
 }
 
 
-//TODO: Implement
 SonarKit::SonarKit(int startX, int startY, StudentWorld* world)
   : SittingObject(IID_SONAR, startX, startY, right, world, 1.0, 2)
 {
@@ -692,4 +703,75 @@ void SonarKit::doSomething()
 
   if(ticksLeft() > 0)
     setTicks(ticksLeft() - 1);
+}
+
+GoldNugget::GoldNugget(int startX, int startY, StudentWorld* world, bool visible,
+		       bool forFrackMan, bool permanent)
+  : SittingObject(IID_GOLD, startX, startY, right, world, 1.0, 2)
+{
+  if(visible)
+    makeSittingObjectVisible();
+
+  m_forFrackMan = forFrackMan;
+  m_permanent = permanent;
+  m_ticksLeft = 100;
+}
+
+GoldNugget::~GoldNugget()
+{}
+
+void GoldNugget::doSomething()
+{
+  //do not do something if nugget is not alive
+  if(!isAlive())
+    return;
+
+  //if nugget invisible and FrackMan <= 4.00 units away, make visible
+  FrackMan* frackman = getWorld()->findNearbyFrackMan(this, 4);
+  if(frackman != NULL && !isVisible() ){
+    makeSittingObjectVisible();
+    return;
+  }
+
+  //if nugget is pickuppable by frackman and under 3.0 units away,
+  //then nugget will activate
+  frackman = getWorld()->findNearbyFrackMan(this, 3);
+  if(frackman != NULL && m_forFrackMan){
+    //nugget must die
+    setState(false);
+
+    //play happy sound to encourage the FrackMan
+    getWorld()->playSound(SOUND_GOT_GOODIE);
+
+    //increase score by 10 points
+    getWorld()->increaseScore(10);
+
+    //Tell FrackMan that he got a new nugget
+    frackman->setGold( frackman->getGold() + 1 );
+  }
+
+  //Check if protester is nearby for bribing
+  RegularProtester* pro = getWorld()->findNearbyProtester(this, 3);
+  if(pro != NULL && !m_forFrackMan){
+    //Nugget must now die
+    setState(false);
+
+    //Play sound so player knows protester got bribed
+    getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
+
+    //Tell protester that it just got bribed
+    pro->addGold();
+
+    //Increase score by 25 points
+    getWorld()->increaseScore(25);
+    
+  }
+
+  //If nugget is temporary, then check if its tick lifetime
+  //has elapsed and set state to dead
+  if(!m_permanent){
+    m_ticksLeft--;
+    if(m_ticksLeft <= 0)
+      setState(false);
+  }
 }

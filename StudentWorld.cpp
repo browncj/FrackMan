@@ -44,6 +44,8 @@ int StudentWorld::init()
   m_actors.push_back(new OilBarrel(45, 55, this));
   m_actors.push_back(new RegularProtester(this));
   m_actors.push_back(new SonarKit(2, 55, this));
+  m_actors.push_back(new GoldNugget(55, 55, this, false, true, true));
+  m_actors.push_back(new GoldNugget(5, 5, this, false, true, true));
 
   //Add all the dirt
   for(int i = 0; i < 60; i++){
@@ -217,6 +219,20 @@ FrackMan* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
   if(distance <= (double) radius)
     return m_frackman;
 
+  return NULL;
+}
+
+//TODO: Update for base class for protester
+RegularProtester* StudentWorld::findNearbyProtester(Actor* a, int radius) const
+{
+  for(size_t i = 0; i < m_actors.size(); i++){
+    //check that actor being examined is a protester
+    if(m_actors[i]->isProtester()){
+      //check that actor being examined is within the radius given
+      if(withinRadiusOf(a->getX(), a->getY(), m_actors[i]->getX(), m_actors[i]->getY(), radius))
+	return (RegularProtester*) m_actors[i];
+    }
+  }
   return NULL;
 }
 

@@ -73,6 +73,7 @@ public:
   void setSonars(int sonars);
 
   int getGold() const;
+  int setGold(int golds) {m_gold = golds;}
 
   void annoyAgent(unsigned int amount); //For annoying the FrackMan
 private:
@@ -183,6 +184,21 @@ public:
   ~SonarKit();
   void doSomething();
 private:
+};
+
+class GoldNugget : public SittingObject
+{
+ public:
+  //forFrackMan is true if the nugget is pickuppable by FrackMan, false if
+  //it's pickuppable by protesters
+  GoldNugget(int startX, int startY, StudentWorld* world, bool visible,
+	     bool forFrackMan, bool permanent);
+  ~GoldNugget();
+  void doSomething();
+ private:
+  bool m_forFrackMan; //true if takable by FrackMan; false if takable by protesters
+  bool m_permanent; //true if nugget is permanent; false if nugget is temporary
+  int m_ticksLeft; //counts number of ticks nugget will remain if in temporary state (100)
 };
 
 #endif // ACTOR_H_
