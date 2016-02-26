@@ -260,6 +260,9 @@ RegularProtester::RegularProtester(StudentWorld* world)
 
   //Protesters start out visible
   setVisible(true);
+
+  //Portester needs to wait at least 200 ticks until perpendicular turn
+  m_ticksTillNextPerp = 200;
 }
 
 RegularProtester::~RegularProtester()
@@ -294,17 +297,18 @@ void RegularProtester::doSomething()
     int y = getY();
     Direction dir = getWorld()->leaveFieldDirection(this);
     newCoords(x, y, 1, dir);
-    //    if(getWorld()->actorCanMoveHere(x, y, false)){
-      //turn to face the proper direction
     setDirection(dir);
 
-      //now move in that direction
+    //now move in that direction
     moveTo(x, y);
-      //    }
 
     return;
   }
   //The protester is not currently trying to leave the oil field
+
+  //Decrement counter for number of ticks until next perpendicular turn
+  if(m_ticksTillNextPerp > 0)
+    m_ticksTillNextPerp--;
 
   //If protester is within 4 of FrackMan, and facing him, then annoy him
   FrackMan* frackman = getWorld()->findNearbyFrackMan(this, 4);
@@ -341,11 +345,93 @@ void RegularProtester::doSomething()
 
     //Do not return out of function, continue on with next step
   }
-  else if(true){
-    //sitting at intersection where it could turn and move one square
-    //in perpendicualr direction
-    //has not made perpendicular turn in last 200 non-resting ticks
+
+  //determine if the protester could move in certain perpendicular directions
+  if((getDirection() == left || getDirection() == right) && m_ticksTillNextPerp == 0){
+    bool b_up = false;
+    bool b_down = false;
+
+    int x = getX();
+    int y = getY();
+
+    newCoords(x, y, 1, up);
+    if(getWorld()->actorCanMoveHere(x, y, false))
+      b_up = true;
+
+    x = getX();
+    y = getY();
+    newCoords(x, y, 1, down);
+    if(getWorld()->actorCanMoveHere(x, y, false))
+      b_down = true;
+
+    if(b_up && !b_down){
+      //Turn up
+      setDirection(up);
+      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      m_ticksTillNextPerp = 200;
+    }
+    else if(!b_up && b_down){
+      setDirection(down);
+      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      m_ticksTillNextPerp = 200;
+    }
+    else if(b_up && b_down){
+      int randomNum = getWorld()->randInt(0, 1);
+      if(randomNum == 0){
+	setDirection(up);
+	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	m_ticksTillNextPerp = 200;
+      }
+      else{
+	setDirection(down);
+	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	m_ticksTillNextPerp = 200;
+      }
+    }
   }
+  else if((getDirection() == up || getDirection() == down) && m_ticksTillNextPerp == 0){
+    bool b_left = false;
+    bool b_right = false;
+
+    int x = getX();
+    int y = getY();
+
+    newCoords(x, y, 1, left);
+    if(getWorld()->actorCanMoveHere(x, y, false))
+      b_left = true;
+
+    x = getX();
+    y = getY();
+    newCoords(x, y, 1, right);
+    if(getWorld()->actorCanMoveHere(x, y, false))
+      b_right = true;
+
+    if(b_left && !b_right){
+      //Turn up
+      setDirection(left);
+      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      m_ticksTillNextPerp = 200;
+    }
+    else if(!b_left && b_right){
+      setDirection(right);
+      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      m_ticksTillNextPerp = 200;
+    }
+    else if(b_left && b_right){
+      int randomNum = getWorld()->randInt(0, 1);
+      if(randomNum == 0){
+	setDirection(left);
+	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	m_ticksTillNextPerp = 200;
+      }
+      else{
+	setDirection(right);
+	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	m_ticksTillNextPerp = 200;
+      }
+    }
+  }
+
 
   //Try to take one step in direction that is being faced
   int newX = getX();

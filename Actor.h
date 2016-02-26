@@ -104,6 +104,8 @@ private:
   int curTicks; //Ticks left until an action is taken. Get descremented and reset
 
   int m_waitUntilShout;
+
+  int m_ticksTillNextPerp; //number of ticks necessary to wait until next perpendicular turn
 };
 
 class Boulder : public Actor

@@ -6,7 +6,8 @@ Protester:
 	-Implement algorithm for leaving the oil field
 	-Check if protester has straight line of sight with FrackMan
 	-check if protester is sitting at an intersection
-	-Optimize maze exit algorithm. Also, prevent FrackMan from going back and forth
+	-Optimize maze exit algorithm. Also, prevent FrackMan from going back and forth. fix segmentation
+	fault?
 
 HardcoreProtester:
 	-everything
