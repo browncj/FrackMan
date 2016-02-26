@@ -371,16 +371,29 @@ void RegularProtester::doSomething()
   m_squaresMoveCurDirection--;
 
   if(m_squaresMoveCurDirection <= 0){
-    //At this point, change directions
-    Direction newDir = (Direction)  getWorld()->randInt(1, 4);
 
-    //TODO: Check for blockage in new direction
+    //Infinite loop that will be broken out of as soon as a direction is
+    //successfully chosen
+    while(true){
+      //At this point, change directions
+      Direction newDir = (Direction)  getWorld()->randInt(1, 4);
 
-    setDirection(newDir);
+      int newX = getX();
+      int newY = getY();
+    
+      newCoords(newX, newY, 1, newDir);
 
-    m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      if(getWorld()->actorCanMoveHere(newX, newY, false)){
+	setDirection(newDir);
+	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
 
-    //Do not return out of function, continue on with next step
+	//Leave outer while loop
+	goto OUTOFLOOP;
+      }
+      //Do not return out of function, continue on with next step
+    }
+  OUTOFLOOP:
+    ;
   }
 
   //determine if the protester could move in certain perpendicular directions
