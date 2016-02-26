@@ -285,10 +285,22 @@ void RegularProtester::doSomething()
     m_waitUntilShout--;
 
   if(m_leaveOilField){
-    //Do all the stuff necessary to leave the oil field
+    //if at exit point, then set protester to dead
+    if((getX() == 60 || getX() == 56) && getY() == 60)
+      setState(false);
 
-    //Dummy implementation: Just die
-    setState(false); //TODO: Change
+    //get coordinates in direction protester must go in to leave
+    int x = getX();
+    int y = getY();
+    Direction dir = getWorld()->leaveFieldDirection(this);
+    newCoords(x, y, 1, dir);
+    //    if(getWorld()->actorCanMoveHere(x, y, false)){
+      //turn to face the proper direction
+    setDirection(dir);
+
+      //now move in that direction
+    moveTo(x, y);
+      //    }
 
     return;
   }

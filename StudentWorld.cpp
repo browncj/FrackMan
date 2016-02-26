@@ -4,6 +4,7 @@
 #include <algorithm> //for remove_if
 #include <cmath> //for square root
 #include <random> //for random numbers
+#include <queue> //for determining a protester's exit point
 
 using namespace std;
 
@@ -351,6 +352,101 @@ bool StudentWorld::canAnnoyFrackMan(RegularProtester* p) const
   int y = p->getY();
   p->newCoords(x, y, 2, p->getDirection());
   return (withinRadiusOf(x, y, m_frackman->getX(), m_frackman->getY(), 2));
+}
+
+//strategy: see if it is possible to leave oil field from
+//square above, square left, square right, and square below
+//blocking out the initial square
+//store them all in bools
+//try to go right first, then up, then left, then down
+Actor::Direction StudentWorld::leaveFieldDirection(Actor* p) const
+{
+  int xStart = p->getX();
+  int yStart = p->getY();
+
+  /*            TRY GOING TO THE RIGHT              */
+
+  int xNext = xStart;
+  int yNext = yStart;
+
+  p->newCoords(xNext, yNext, 1, Actor::right);
+
+  if(canLeaveFieldFromHere(xStart, yStart, xNext, yNext))
+    return Actor::right;
+
+
+  /*              TRY GOING UP                    */
+
+  xNext = xStart;
+  yNext = yStart;
+
+  p->newCoords(xNext, yNext, 1, Actor::up);
+
+  if(canLeaveFieldFromHere(xStart, yStart, xNext, yNext))
+     return Actor::up;
+
+  /*               TRY GOING LEFT                */
+  xNext = xStart;
+  yNext = yStart;
+
+  p->newCoords(xNext, yNext, 1, Actor::left);
+
+  if(canLeaveFieldFromHere(xStart, yStart, xNext, yNext))
+     return Actor::left;
+
+  /*    NOW THE ONLY POSSIBLE EXIT DIRECTION IS DOWN   */
+  return Actor::down;
+}
+
+//if oil field can be left from (xStart, yStart) without going over (xPrev, yPrev),
+//return true. Otherwise, return false
+bool StudentWorld::canLeaveFieldFromHere(int xPrev, int yPrev, int xStart, int yStart) const
+{
+  bool seenMaze[56][60];
+  for(int i = 0; i < 56; i++){
+    for(int k = 0; k < 60; k++){
+      seenMaze[i][k] = false;
+    }
+  }
+  
+  //Cannot move back onto previous point
+  seenMaze[xPrev][yPrev] = true;
+  
+  //Determine if it is possible to leave maze from here
+  //(like stack, except instead of .top() it's .front()
+  queue<Coord> myCoords;
+  explore(seenMaze, myCoords, xStart, yStart);
+
+  while( !myCoords.empty() )
+    {
+      Coord curr = myCoords.front();
+      myCoords.pop();
+
+      int cr = curr.r();
+      int cc = curr.c();
+
+      if(cr == 56 && cc == 60)
+	return true;
+
+      //Explore all the different directions
+      explore(seenMaze, myCoords, cr-1, cc);
+      explore(seenMaze, myCoords, cr+1, cc);
+      explore(seenMaze, myCoords, cr, cc-1);
+      explore(seenMaze, myCoords, cr, cc+1); 
+    }
+  return false;
+}
+
+//explore the given spot
+void StudentWorld::explore(bool maze[56][60], queue<Coord>& myCoords, int r, int c) const
+{
+  //  enum mazeTracker {WALL, OPEN, SEEN};
+
+  if(actorCanMoveHere(r, c, false) && !maze[r][c])
+    {
+      myCoords.push(Coord(r, c));
+      maze[r][c] = true; //just ensure that it's not OPEN
+    }
 }
 
 void StudentWorld::setDisplayText()

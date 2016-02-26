@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include <string>
 #include <vector>
+#include <queue>
 
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
@@ -69,7 +70,29 @@ public:
   //TODO: Use larger protester class
   bool canAnnoyFrackMan(RegularProtester* p) const;
 
+  //Returns the direction a protester must walk to in order to leave
+  //the oil field
+  Actor::Direction leaveFieldDirection(Actor* p) const;
+
 private:
+  //A structure for keeping track of coordinates
+  class Coord
+  {
+  public:
+    Coord(int rr, int cc) : m_r(rr), m_c(cc) {}
+    int r() const {return m_r;}
+    int c() const {return m_c;}
+  private:
+    int m_r;
+    int m_c;
+  };
+  
+  //Return true if oil field can be exited from this point
+  bool canLeaveFieldFromHere(int xPrev, int yPrev, int xStart, int yStart) const;
+  
+  //helper function for canLeaveFieldFromHere
+  void explore(bool maze[56][60], std::queue<Coord>& myCoords, int r, int c) const;
+
   void setDisplayText();
   bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad) const;
   std::string formatDisplayText(int score, int level, int lives, int health,
@@ -79,7 +102,6 @@ private:
   int m_barrels; //Number of barrels left on current level
   Dirt* m_dirt[60][60];
   FrackMan* m_frackman;
-
 };
 
 #endif // STUDENTWORLD_H_
