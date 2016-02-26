@@ -343,6 +343,16 @@ int StudentWorld::randInt(int min, int max) const
   uniform_int_distribution<> distro(min, max);
   return distro(generator);
 }
+
+//returns true if FrackMan is within 2x2 radius of space two spots in front of protester
+bool StudentWorld::canAnnoyFrackMan(RegularProtester* p) const
+{
+  int x = p->getX();
+  int y = p->getY();
+  p->newCoords(x, y, 2, p->getDirection());
+  return (withinRadiusOf(x, y, m_frackman->getX(), m_frackman->getY(), 2));
+}
+
 void StudentWorld::setDisplayText()
 {
   //TODO: Get actual values

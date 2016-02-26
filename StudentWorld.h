@@ -65,6 +65,10 @@ public:
   //Return a random interger between min and max, inclusive
   int randInt(int min, int max) const;
 
+  //Returns true if protester can annoy FrackMan
+  //TODO: Use larger protester class
+  bool canAnnoyFrackMan(RegularProtester* p) const;
+
 private:
   void setDisplayText();
   bool withinRadiusOf(int x1, int y1, int x2, int y2, int rad) const;

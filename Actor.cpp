@@ -296,19 +296,17 @@ void RegularProtester::doSomething()
 
   //If protester is within 4 of FrackMan, and facing him, then annoy him
   FrackMan* frackman = getWorld()->findNearbyFrackMan(this, 4);
-  if(frackman != NULL && m_waitUntilShout == 0)
+  if(frackman != NULL && m_waitUntilShout == 0 && getWorld()->canAnnoyFrackMan(this))
     {
-      //TODO: Check if facing in the right direction
-
       //Play sound
       getWorld()->playSound(SOUND_PROTESTER_YELL);
 
       //Damage the FrackMan
       frackman->annoyAgent(2);
-
+	
       //Do not let protester shout for 15 ticks
       m_waitUntilShout = 15;
-
+	
       //Do not do anything else this tick
       return;
     }
