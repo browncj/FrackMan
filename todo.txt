@@ -3,20 +3,13 @@ StudentWorld:
 added in set spots
 
 Protester:
-	-Implement algorithm for leaving the oil field
-	-prevent protester from just spinning around in circles
 	-Optimize maze exit algorithm. Also, prevent FrackMan from going back and forth. fix segmentation
 	fault?
 
 HardcoreProtester:
-	-everything
+	-differentiate doSomething() from normal protester
 
-FrackMan:
-	-Do not add squirt onto field if starting location is not valid
-
--Try and make as many methods const as possible
--Try to tell if frackman is alive (in FrackMan::doSomething() and in StudentWorld::move()) using
-   isAlive(), not directly looking at the life count?
--Every time there's a variable like (distanceSquared) or (distance), change it to use
-   the withinRadiusOf function
 -Test on Visual Studio
+
+
+-report.txt

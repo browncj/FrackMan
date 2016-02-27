@@ -19,7 +19,7 @@ public:
   void setState(bool alive);
   virtual bool isProtester() const {return false;} //returns true only if a protester
   virtual bool isBoulder() const {return false;} //Returns true only if a boulder
-  StudentWorld* getWorld() const; //TODO: See if this can be made private
+  StudentWorld* getWorld() const;
   virtual void makeSittingObjectVisible();
   virtual void annoyAgent(unsigned int amount) {return;} //for annoying agents
   void newCoords(int& x, int& y, int dist, Direction dir) const; //modify x and y in direction of distance
@@ -41,7 +41,7 @@ class Agent : public Actor
 	StudentWorld* world, float size, unsigned int depth, int health);
   ~Agent();
   //Right now, I'm not overriding void doSomething() here just to see what happens
-  int getHealth() const; //get health of the current Agent TODO: Make percentage??
+  int getHealth() const; //get health of the current Agent
   void setHealth(int health); //set the health of the agent
  private:
   int m_health;
@@ -56,8 +56,6 @@ public:
 private:
 };
 
-//TODO: This class will probably end up deriving from
-//some other, more specific base class
 class FrackMan : public Agent
 {
 public:
@@ -78,7 +76,6 @@ public:
   void annoyAgent(unsigned int amount); //For annoying the FrackMan
 private:
   void processMovement(Direction moveDir);
-  //TODO: Figure out which ones of these variables actually need to be here
   int m_water;
   int m_sonar;
   int m_gold;

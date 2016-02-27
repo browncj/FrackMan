@@ -52,8 +52,6 @@ int StudentWorld::init()
   //Add all the dirt
   for(int i = 0; i < 60; i++){
     for(int k = 0; k < 60; k++){
-      //TODO: Make sure specifying coordinates in two places
-      //does not screw things up
       m_dirt[i][k] = new Dirt(i, k, this);
     }
   }
@@ -113,14 +111,7 @@ int StudentWorld::move()
   //Delete all actors that are dead
   m_actors.erase(remove_if(m_actors.begin(), m_actors.end(), isDead), m_actors.end());
 
-  //TODO: If player died this tick, then return and indicate so
-
-  //TODO: Check if player has collected all barrels in level, return
-  //properly if so
-
   return GWSTATUS_CONTINUE_GAME;
-  //return GWSTATUS_FINISHED_LEVEL;
-  //return GWSTATUS_PLAYER_DIED;
 }
 
 void StudentWorld::cleanUp()
@@ -224,8 +215,7 @@ FrackMan* StudentWorld::findNearbyFrackMan(Actor* a, int radius) const
   return NULL;
 }
 
-//TODO: Update for base class for protester
-RegularProtester* StudentWorld::findNearbyProtester(Actor* a, int radius) const
+Protester* StudentWorld::findNearbyProtester(Actor* a, int radius) const
 {
   for(size_t i = 0; i < m_actors.size(); i++){
     //check that actor being examined is a protester
@@ -311,8 +301,7 @@ bool StudentWorld::actorCanMoveHere(int x, int y, bool canMoveThroughDirt) const
   //If there is dirt, here, then no one can move here if canMoveThroughDirt
   //is not specified
 
-  //NOTE/TODO: Right now, the +4 (for sprite size) is hardcoded
-  //possibly change in the future?
+  //Designed for a sprite of size 4
   if(!canMoveThroughDirt){
     for(int i = x; i < x + 4 && i < 60; i++){
       for(int k = y; k < y + 4 && k < 60; k++){
@@ -475,7 +464,6 @@ void StudentWorld::explore(bool maze[56][60], queue<Coord>& myCoords, int r, int
 
 void StudentWorld::setDisplayText()
 {
-  //TODO: Get actual values
   int score = getScore();
   int level = getLevel();
   int lives = getLives();
@@ -520,9 +508,11 @@ string StudentWorld::formatDisplayText(int score, int level, int lives, int heal
   s += " Lives: ";
   s += formatDigit(lives, 1, true);
 
-  //TODO: Display percentage, not hitpoints
+  //convert to percentage instead of hitpoints
+  int healthPercent = health*10;
   s += " Hlth: ";
-  s += formatDigit(health, 3, false);
+  s += formatDigit(healthPercent, 3, false);
+  s+= "%";
 
   s += " Water:";
   s += formatDigit(squirts, 2, false);

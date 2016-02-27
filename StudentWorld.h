@@ -37,8 +37,7 @@ public:
 
   //return a pointer to one protester within a radius of radius of actor
   //if no such protester exists, then return NULL
-  //TODO: Use base protester class for differentiated protester behavior
-  RegularProtester* findNearbyProtester(Actor* a, int radius) const;
+  Protester* findNearbyProtester(Actor* a, int radius) const;
 
   //Annoy all nearby protesters within a radius of radius by the
   //amount specified

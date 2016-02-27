@@ -135,7 +135,6 @@ void FrackMan::doSomething()
 	    getWorld()->playSound(SOUND_PLAYER_SQUIRT);
 	    m_water--;
 
-	    //TODO: Check if too close to boulder or dirt
 	    Direction myDir = getDirection();
 	    Squirt* newSquirt;
 	    if(myDir == up)
@@ -583,7 +582,8 @@ void HardCoreProtester::addGold()
   getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
 
   //player gets points for the bribery
-  getWorld()->increaseScore(50);
+  //this is an addition to the 25 points that the nugget class provides
+  getWorld()->increaseScore(25);
 
   //set number of ticks hardcore protester will stare
   m_stareAtGold = std::max((unsigned int) 50, 100 - getWorld()->getLevel() * 10);
@@ -951,7 +951,7 @@ void GoldNugget::doSomething()
   }
 
   //Check if protester is nearby for bribing
-  RegularProtester* pro = getWorld()->findNearbyProtester(this, 3);
+  Protester* pro = getWorld()->findNearbyProtester(this, 3);
   if(pro != NULL && !m_forFrackMan){
     //Nugget must now die
     setState(false);
