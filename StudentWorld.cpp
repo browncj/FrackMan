@@ -43,7 +43,8 @@ int StudentWorld::init()
   m_actors.push_back(new OilBarrel(40, 45, this));
   m_actors.push_back(new OilBarrel(35, 50, this));
   m_actors.push_back(new OilBarrel(45, 55, this));
-  m_actors.push_back(new RegularProtester(this));
+  //m_actors.push_back(new RegularProtester(this));
+  m_actors.push_back(new HardCoreProtester(this));
   m_actors.push_back(new SonarKit(2, 55, this));
   m_actors.push_back(new GoldNugget(55, 55, this, false, true, true));
   m_actors.push_back(new GoldNugget(5, 5, this, false, true, true));
@@ -345,8 +346,8 @@ int StudentWorld::randInt(int min, int max) const
   return distro(generator);
 }
 
-//returns true if FrackMan is within 2x2 radius of space two spots in front of protester
-bool StudentWorld::canAnnoyFrackMan(RegularProtester* p) const
+//true if FrackMan is within 2x2 radius of space two spots in front of protester
+bool StudentWorld::canAnnoyFrackMan(Protester* p) const
 {
   int x = p->getX();
   int y = p->getY();

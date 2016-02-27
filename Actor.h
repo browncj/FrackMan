@@ -84,28 +84,69 @@ private:
   int m_gold;
 };
 
-//TODO: Factor out into larger Protester class
-class RegularProtester : public Agent
+class Protester : public Agent
 {
-public:
-  RegularProtester(StudentWorld* world);
-  ~RegularProtester();
+ public:
+  Protester(StudentWorld* world, int imageID, int initialHP);
+  ~Protester();
   void doSomething();
-  void addGold();
-  void annoyAgent(unsigned int amount);
-  bool isProtester() const {return true;} //returns true since is a protester
-private:
-  //Private stuff
-  bool m_leaveOilField;
 
-  int m_squaresMoveCurDirection;
+  //for bribing the given protester
+  virtual void addGold() = 0;
+
+  //returns true if protester is trying to leave oil field
+  bool leavingOilField() const {return m_leaveOilField;}
+
+  //set that the protester must now leave the oil field
+  void setLeaveField() {m_leaveOilField = true;}
+
+  //set number of squares to move to the number specified
+  void setSquaresMove(int squares) {m_squaresMoveCurDirection = squares;}
+
+  //get the number of squares left for protester to move in current direction
+  int getSquaresMove() {return m_squaresMoveCurDirection;}
+
+  //get current ticks that protester should wait
+  int getCurTicks() const {return curTicks;}
+
+  //set the number of ticks protester has left to wait at the moment
+  void setCurTicks(int ticks) {curTicks = ticks;}
+
+  //get ticks that protester must wait every cycle for this level
+  int getTicksToWait() const {return ticksToWait;}
+
+  bool isProtester() const {return true;} //returns true since is a protester
+  
+ private:
+  int m_squaresMoveCurDirection; //number of ticks to walk in current direction
+  bool m_leaveOilField; //true if protester is trying to leave oil field
 
   int ticksToWait; //Does not change except once every level. Ticks to wait every time
   int curTicks; //Ticks left until an action is taken. Get descremented and reset
 
-  int m_waitUntilShout;
+  int m_waitUntilShout; //ticks to wait until protester can shout again
 
-  int m_ticksTillNextPerp; //number of ticks necessary to wait until next perpendicular turn
+  int m_ticksTillNextPerp; //ticks to wait until protester can make a perpendicular turn again
+};
+
+class RegularProtester : public Protester
+{
+public:
+  RegularProtester(StudentWorld* world);
+  ~RegularProtester();
+  void annoyAgent(unsigned int amount); //for annoying the protester
+  virtual void addGold(); //for bribing the protester
+private:
+};
+
+class HardCoreProtester : public Protester
+{
+ public:
+  HardCoreProtester(StudentWorld* world);
+  ~HardCoreProtester();
+  virtual void addGold(); //for bribing the hardcore protester
+  void annoyAgent(unsigned int amount); //for annoying the hardcore protester
+ private:
 };
 
 class Boulder : public Actor

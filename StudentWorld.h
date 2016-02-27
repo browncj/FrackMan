@@ -67,8 +67,7 @@ public:
   int randInt(int min, int max) const;
 
   //Returns true if protester can annoy FrackMan
-  //TODO: Use larger protester class
-  bool canAnnoyFrackMan(RegularProtester* p) const;
+  bool canAnnoyFrackMan(Protester* p) const;
 
   //Returns the direction a protester must walk to in order to leave
   //the oil field

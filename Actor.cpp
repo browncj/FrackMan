@@ -243,51 +243,51 @@ void FrackMan::annoyAgent(unsigned int amount)
   setHealth( getHealth() - amount );
 }
 
-RegularProtester::RegularProtester(StudentWorld* world)
-  : Agent(IID_PROTESTER, 60, 60, left, world, 1.0, 0, 5)
+Protester::Protester(StudentWorld* world, int imageID, int initialHP)
+  : Agent(imageID, 60, 60, left, world, 1.0, 0, initialHP)
 {
-  //Decide how many squares to move left before possibly switching direction
-  //Number must be between 8 and 60, inclusive
-  m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
-
-  //Protester starts out not trying to leave the oil field
-  m_leaveOilField = false;
-
-  //Protester can shout immediately
-  m_waitUntilShout = 0;
-
-  curTicks = ticksToWait = std::max((unsigned int) 0, 3 - (  (getWorld()->getLevel())   /4));
-
   //Protesters start out visible
   setVisible(true);
 
-  //Portester needs to wait at least 200 ticks until perpendicular turn
+  //Protester starts out not trying to leave oil field
+  m_leaveOilField = false;
+
+  //randomly set number of squares protester walks in current direction
+  setSquaresMove(getWorld()->randInt(8, 60));
+  
+  //set the number of ticks between actions for the protester
+  curTicks = ticksToWait = std::max((unsigned int) 0, 3 - (  (getWorld()->getLevel())   /4));
+
+  //Protester can shout right away
+  m_waitUntilShout = 0;
+
+  //Protester must wait 200 ticks until it can turn perpendicularly
   m_ticksTillNextPerp = 200;
 }
 
-RegularProtester::~RegularProtester()
+Protester::~Protester()
 {}
 
-void RegularProtester::doSomething()
+void Protester::doSomething()
 {
   //If the protester is dead, don't do anything
   if(!isAlive())
     return;
 
   //If curTicks is not zero, then the protester must wait
-  if( curTicks != 0 ){
-    curTicks--;
+  if( getCurTicks() != 0 ){
+    setCurTicks(getCurTicks() - 1);
     return;
   }
 
   //It is now time for the protester to move
-  curTicks = ticksToWait;
+  setCurTicks(getTicksToWait());
 
   //Decrement counter until protester can shout again
   if(m_waitUntilShout > 0)
     m_waitUntilShout--;
 
-  if(m_leaveOilField){
+  if(leavingOilField()){
     //if at exit point, then set protester to dead
     if((getX() == 60 || getX() == 56) && getY() == 60)
       setState(false);
@@ -336,7 +336,7 @@ void RegularProtester::doSomething()
     int y = getY();
     newCoords(x, y, 1, left);
     moveTo(x, y);
-    m_squaresMoveCurDirection = 0;
+    setSquaresMove(0);
     return;
   }
   else if(getWorld()->openSightFrackMan(getX(), getY(), right)){
@@ -345,7 +345,7 @@ void RegularProtester::doSomething()
     int y = getY();
     newCoords(x, y, 1, right);
     moveTo(x, y);
-    m_squaresMoveCurDirection = 0;
+    setSquaresMove(0);
     return;
   }
   else if(getWorld()->openSightFrackMan(getX(), getY(), up)){
@@ -354,7 +354,7 @@ void RegularProtester::doSomething()
     int y = getY();
     newCoords(x, y, 1, up);
     moveTo(x, y);
-    m_squaresMoveCurDirection = 0;
+    setSquaresMove(0);
     return;
   }
   else if(getWorld()->openSightFrackMan(getX(), getY(), down)){
@@ -363,14 +363,14 @@ void RegularProtester::doSomething()
     int y = getY();
     newCoords(x, y, 1, down);
     moveTo(x, y);
-    m_squaresMoveCurDirection = 0;
+    setSquaresMove(0);
     return;
   }
 
-  //The protester cannot directly see the FracKMan
-  m_squaresMoveCurDirection--;
+  //The protester cannot directly see the FrackMan
+  setSquaresMove( getSquaresMove() - 1 );
 
-  if(m_squaresMoveCurDirection <= 0){
+  if(getSquaresMove() <= 0){
 
     //Infinite loop that will be broken out of as soon as a direction is
     //successfully chosen
@@ -385,7 +385,7 @@ void RegularProtester::doSomething()
 
       if(getWorld()->actorCanMoveHere(newX, newY, false)){
 	setDirection(newDir);
-	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	setSquaresMove(getWorld()->randInt(8, 60));
 
 	//Leave outer while loop
 	goto OUTOFLOOP;
@@ -417,24 +417,24 @@ void RegularProtester::doSomething()
     if(b_up && !b_down){
       //Turn up
       setDirection(up);
-      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      setSquaresMove(getWorld()->randInt(8, 60));
       m_ticksTillNextPerp = 200;
     }
     else if(!b_up && b_down){
       setDirection(down);
-      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      setSquaresMove(getWorld()->randInt(8, 60));
       m_ticksTillNextPerp = 200;
     }
     else if(b_up && b_down){
       int randomNum = getWorld()->randInt(0, 1);
       if(randomNum == 0){
 	setDirection(up);
-	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	setSquaresMove(getWorld()->randInt(8, 60));
 	m_ticksTillNextPerp = 200;
       }
       else{
 	setDirection(down);
-	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	setSquaresMove(getWorld()->randInt(8, 60));
 	m_ticksTillNextPerp = 200;
       }
     }
@@ -459,24 +459,24 @@ void RegularProtester::doSomething()
     if(b_left && !b_right){
       //Turn up
       setDirection(left);
-      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      setSquaresMove(getWorld()->randInt(8, 60));
       m_ticksTillNextPerp = 200;
     }
     else if(!b_left && b_right){
       setDirection(right);
-      m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+      setSquaresMove(getWorld()->randInt(8, 60));
       m_ticksTillNextPerp = 200;
     }
     else if(b_left && b_right){
       int randomNum = getWorld()->randInt(0, 1);
       if(randomNum == 0){
 	setDirection(left);
-	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	setSquaresMove(getWorld()->randInt(8, 60));
 	m_ticksTillNextPerp = 200;
       }
       else{
 	setDirection(right);
-	m_squaresMoveCurDirection = getWorld()->randInt(8, 60);
+	setSquaresMove(getWorld()->randInt(8, 60));
 	m_ticksTillNextPerp = 200;
       }
     }
@@ -496,8 +496,17 @@ void RegularProtester::doSomething()
     moveTo(newX, newY);
   else
     //Protester cannot move, so take no more steps in this direction
-    m_squaresMoveCurDirection = 0;
+    setSquaresMove(0);
 }
+
+
+RegularProtester::RegularProtester(StudentWorld* world)
+  : Protester(world, IID_PROTESTER, 5)
+{
+}
+
+RegularProtester::~RegularProtester()
+{}
 
 void RegularProtester::addGold()
 {
@@ -507,13 +516,13 @@ void RegularProtester::addGold()
   //note: gold nugget class handled increasing score for bribery
   
   //the protester now decides to leave the oil field
-  m_leaveOilField = true;
+  setLeaveField();
 }
 
 void RegularProtester::annoyAgent(unsigned int amount)
 {
   //Protester cannot be annoyed if it is leaving the oil field
-  if (m_leaveOilField)
+  if (leavingOilField())
     return;
 
   //Subtract the damage from the protester's health
@@ -526,15 +535,15 @@ void RegularProtester::annoyAgent(unsigned int amount)
     unsigned int maxPartner = 50;
 
     //Extend the resting state of the protester
-    curTicks = std::max(maxPartner, 100-(getWorld()->getLevel() * 10 ));
+    setCurTicks(std::max(maxPartner, 100-(getWorld()->getLevel() * 10 )));
   }
   else if(getHealth() <= 0){
     //The protester will now try to leave the oil field
-    m_leaveOilField = true;
+    setLeaveField();
     getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
 
     //Do something on the very next tick
-    curTicks = 0;
+    setCurTicks(0);
 
     //Check if protester was killed by squirt
     if(amount == 2){
@@ -547,6 +556,26 @@ void RegularProtester::annoyAgent(unsigned int amount)
     }
     
   }
+}
+
+HardCoreProtester::HardCoreProtester(StudentWorld* world)
+  : Protester(world, IID_HARD_CORE_PROTESTER, 20)
+{
+}
+
+HardCoreProtester::~HardCoreProtester()
+{}
+
+//TODO: Implement bribery for hardcore protesters
+void HardCoreProtester::addGold()
+{
+  return;
+}
+
+//TODO: Implement annoying the hardcore protestern
+void HardCoreProtester::annoyAgent(unsigned int amount)
+{
+  return;
 }
 
 Boulder::Boulder(int startX, int startY, StudentWorld* world)
