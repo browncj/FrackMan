@@ -116,8 +116,14 @@ class Protester : public Agent
   int getTicksToWait() const {return ticksToWait;}
 
   bool isProtester() const {return true;} //returns true since is a protester
+
+  //used to annoy the protester
+  void annoyAgent(unsigned int amount);
   
  private:
+  //for increasing score due to a squirt kill
+  virtual void addPointsDueToSquirtKill() = 0;
+
   int m_squaresMoveCurDirection; //number of ticks to walk in current direction
   bool m_leaveOilField; //true if protester is trying to leave oil field
 
@@ -134,9 +140,9 @@ class RegularProtester : public Protester
 public:
   RegularProtester(StudentWorld* world);
   ~RegularProtester();
-  void annoyAgent(unsigned int amount); //for annoying the protester
   virtual void addGold(); //for bribing the protester
 private:
+  virtual void addPointsDueToSquirtKill();
 };
 
 class HardCoreProtester : public Protester
@@ -145,8 +151,8 @@ class HardCoreProtester : public Protester
   HardCoreProtester(StudentWorld* world);
   ~HardCoreProtester();
   virtual void addGold(); //for bribing the hardcore protester
-  void annoyAgent(unsigned int amount); //for annoying the hardcore protester
  private:
+  virtual void addPointsDueToSquirtKill();
 };
 
 class Boulder : public Actor

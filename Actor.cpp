@@ -499,27 +499,7 @@ void Protester::doSomething()
     setSquaresMove(0);
 }
 
-
-RegularProtester::RegularProtester(StudentWorld* world)
-  : Protester(world, IID_PROTESTER, 5)
-{
-}
-
-RegularProtester::~RegularProtester()
-{}
-
-void RegularProtester::addGold()
-{
-  //play the "I'm rich!" sound effect
-  getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
-
-  //note: gold nugget class handled increasing score for bribery
-  
-  //the protester now decides to leave the oil field
-  setLeaveField();
-}
-
-void RegularProtester::annoyAgent(unsigned int amount)
+void Protester::annoyAgent(unsigned int amount)
 {
   //Protester cannot be annoyed if it is leaving the oil field
   if (leavingOilField())
@@ -548,7 +528,7 @@ void RegularProtester::annoyAgent(unsigned int amount)
     //Check if protester was killed by squirt
     if(amount == 2){
       //add 100 points
-      getWorld()->increaseScore(100);
+      addPointsDueToSquirtKill();
     }
     else if(amount == 100){ //check if killed by boulder
       //add 500 points
@@ -557,6 +537,30 @@ void RegularProtester::annoyAgent(unsigned int amount)
     
   }
 }
+
+RegularProtester::RegularProtester(StudentWorld* world)
+  : Protester(world, IID_PROTESTER, 5)
+{
+}
+
+RegularProtester::~RegularProtester()
+{}
+
+void RegularProtester::addGold()
+{
+  //play the "I'm rich!" sound effect
+  getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
+
+  //note: gold nugget class handled increasing score for bribery
+  
+  //the protester now decides to leave the oil field
+  setLeaveField();
+}
+
+void RegularProtester::addPointsDueToSquirtKill(){
+  getWorld()->increaseScore(100);
+}
+
 
 HardCoreProtester::HardCoreProtester(StudentWorld* world)
   : Protester(world, IID_HARD_CORE_PROTESTER, 20)
@@ -572,10 +576,8 @@ void HardCoreProtester::addGold()
   return;
 }
 
-//TODO: Implement annoying the hardcore protestern
-void HardCoreProtester::annoyAgent(unsigned int amount)
-{
-  return;
+void HardCoreProtester::addPointsDueToSquirtKill(){
+  getWorld()->increaseScore(250);
 }
 
 Boulder::Boulder(int startX, int startY, StudentWorld* world)
