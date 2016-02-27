@@ -274,6 +274,10 @@ void Protester::doSomething()
   if(!isAlive())
     return;
 
+  //if the protester is staring at some gold, don't do anything
+  if(!stareAtGold())
+    return;
+
   //If curTicks is not zero, then the protester must wait
   if( getCurTicks() != 0 ){
     setCurTicks(getCurTicks() - 1);
@@ -565,15 +569,34 @@ void RegularProtester::addPointsDueToSquirtKill(){
 HardCoreProtester::HardCoreProtester(StudentWorld* world)
   : Protester(world, IID_HARD_CORE_PROTESTER, 20)
 {
+  //hardcore protesters do not start staring at gold
+  m_stareAtGold = 0;
 }
 
 HardCoreProtester::~HardCoreProtester()
 {}
 
-//TODO: Implement bribery for hardcore protesters
+//bribery for hardcore protesters
 void HardCoreProtester::addGold()
 {
-  return;
+  //play entertaining sound for the player
+  getWorld()->playSound(SOUND_PROTESTER_FOUND_GOLD);
+
+  //player gets points for the bribery
+  getWorld()->increaseScore(50);
+
+  //set number of ticks hardcore protester will stare
+  m_stareAtGold = std::max((unsigned int) 50, 100 - getWorld()->getLevel() * 10);
+}
+
+bool HardCoreProtester::stareAtGold()
+{
+  if(m_stareAtGold <= 0)
+    return true;
+  else{
+    m_stareAtGold--;
+    return false;
+  }
 }
 
 void HardCoreProtester::addPointsDueToSquirtKill(){

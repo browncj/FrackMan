@@ -124,6 +124,11 @@ class Protester : public Agent
   //for increasing score due to a squirt kill
   virtual void addPointsDueToSquirtKill() = 0;
 
+  //for processing any staring that may be going on at gold
+  //returns true if protester should do something this turn, returns
+  //false if protester is too busy staring at gold and is paralyzedz
+  virtual bool stareAtGold() = 0;
+
   int m_squaresMoveCurDirection; //number of ticks to walk in current direction
   bool m_leaveOilField; //true if protester is trying to leave oil field
 
@@ -142,6 +147,7 @@ public:
   ~RegularProtester();
   virtual void addGold(); //for bribing the protester
 private:
+  virtual bool stareAtGold() {return true;} //regular protester never stares at gold
   virtual void addPointsDueToSquirtKill();
 };
 
@@ -152,7 +158,10 @@ class HardCoreProtester : public Protester
   ~HardCoreProtester();
   virtual void addGold(); //for bribing the hardcore protester
  private:
+  virtual bool stareAtGold();
   virtual void addPointsDueToSquirtKill();
+
+  int m_stareAtGold;
 };
 
 class Boulder : public Actor
