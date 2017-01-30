@@ -6,7 +6,8 @@ that all elements of the game world interact properly with each other.
 
 ### Compilation
 The dev versions of OpenGL and the Freeglut graphics library must be
-installed in order to compile the game.
+installed in order to compile the game. Simply run "make" in order to
+compile it.
 
 ### Gameplay
 Use the arrow keys to move up and down and the space key to shoot water.
